@@ -7,10 +7,16 @@ namespace Latex_Studienarbeit
     {
         static void Main(string[] args)
         {
-            //CreateDatabase.CreateDatabaseSQLite();
-            //CreateDatabase.InsertIntoDatabase();
-            ReadFromDatabase.Read();
-            //ReadJson.readJson();
+            createAndInsertIntoDatabase();
+            //ReadFromDatabase.Read();
+            //ChangeEntry.ChangeOrderinDatabase();
+        }
+        public static void createAndInsertIntoDatabase()
+        {
+            CreateDatabase.CreateDatabaseSQLite();
+            CreateDatabase.InsertIntoDatabase();
+            ReadJson.readJson();
+            ReadJson.ChangeDatabaseEntry();
         }
     }
 }

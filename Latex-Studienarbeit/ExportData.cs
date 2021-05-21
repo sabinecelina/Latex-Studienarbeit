@@ -10,15 +10,17 @@ namespace Latex_Studienarbeit
     {
         private static string[] uebungen = new string[] { "preasuebg-", "hausuebg-.tex", "tutorium-.tex" };
         private static string[] uebungsart = new string[] { "P", "H", "T" };
-        public static string ExportAufgaben(string aufgabe, SQLiteDataReader reader)
+        public static string ExportAufgaben(SQLiteDataReader reader)
         {
+            string aufgabe = "";
             aufgabe = reader["Uebungsaufgabe"].ToString();
             aufgabe = aufgabe.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
                 .Replace("replacedonesign", "\'").Replace("dollar", @"$");
             return aufgabe;
         }
-        public static string ExportLoesungen(string loesung, SQLiteDataReader reader)
+        public static string ExportLoesungen(SQLiteDataReader reader)
         {
+            string loesung = "";
             loesung = reader["Loesung"].ToString();
             loesung = loesung.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
                 .Replace("replacedonesign", "\'").Replace("dollar", @"$");
@@ -75,6 +77,20 @@ namespace Latex_Studienarbeit
             CreatePath(sql, m_dbConnection, "loesungen.tex", 2);
             Console.WriteLine("Es wurde eine neue loesung.tex Datei erstellt");
         }
+        public static string ExportNameDerAufgabe(SQLiteDataReader reader)
+        {
+            string aufgabe = "";
+            aufgabe = reader["NameDerAufgabe"].ToString();
+            aufgabe = aufgabe.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
+                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+            return aufgabe;
+        }
+        public static string ExportUebungsnummer(SQLiteDataReader reader)
+        {
+            string nummer = "";
+            nummer = reader["Uebungsnummer"].ToString();
+            return nummer;
+        }
         public static void CreatePath(string sql, SQLiteConnection m_dbConnection, string filepath, int exportArt)
         {
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
@@ -89,16 +105,16 @@ namespace Latex_Studienarbeit
                 switch (exportArt)
                 {
                     case 1:
-                        aufgabe = ExportData.ExportAufgaben(aufgabe, reader);
+                        aufgabe = ExportData.ExportAufgaben(reader);
                         aufgaben.Add(aufgabe);
                         break;
                     case 2:
-                        loesung = ExportData.ExportLoesungen(loesung, reader);
+                        loesung = ExportData.ExportLoesungen(reader);
                         aufgaben.Add(loesung);
                         break;
                     case 3:
-                        aufgabe = ExportData.ExportAufgaben(aufgabe, reader);
-                        loesung = ExportData.ExportLoesungen(loesung, reader);
+                        aufgabe = ExportData.ExportAufgaben( reader);
+                        loesung = ExportData.ExportLoesungen( reader);
                         aufgaben.Add(aufgabe + loesung);
                         break;
                 }

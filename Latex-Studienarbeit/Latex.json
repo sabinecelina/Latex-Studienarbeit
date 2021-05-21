@@ -21,8 +21,12 @@
                 "aufgabennummer": 1
               },
               {
-                "name": "Dimetrische Projektion nach DIN ISO 5456-3 (Ingenieur-Axonometrie)",
+                "name": "Kuboktaeder",
                 "aufgabennummer": 2
+              },
+              {
+                "name": "Dimetrische Projektion nach DIN ISO 5456-3 (Ingenieur-Axonometrie)",
+                "aufgabennummer": 3
               }
             ],
             "T": [

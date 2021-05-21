@@ -29,7 +29,7 @@ namespace Latex_Studienarbeit
             int auswahl = Convert.ToInt32(Console.ReadLine());
             if(auswahl == 1)
             {
-                ChangeEntry.ChangeTexEntry();
+                ChangeEntry.UpdateTexEntry();
             }
             ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
             int numberUebungseinheitUserInput = Convert.ToInt32(Console.ReadLine());
