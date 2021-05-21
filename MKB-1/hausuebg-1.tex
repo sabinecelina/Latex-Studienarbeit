@@ -1,0 +1,166 @@
+Skizzieren Sie einen achsenparallelen Quader mit Breite \,$2$,\, H"ohe \,$1$\, und Tiefe \,$3$\, (L"angeneinheiten), dessen linke hintere untere Ecke am Punkt \,$(0,4,0)$\, liegt. Verwenden Sie hierzu
+    \begin{itemize}
+%    \setlength{\itemsep}{-0.8ex}
+    \item eine sogenannte \glqq Kavalierprojektion\grqq\ oder \glqq Kabinettprojektion\grqq\ mit den axonometrischen Angaben \,$\alpha \,=\, \ang{135}$,\; $\beta \,= \,\ang{90}$,\; $s_1 \,=\, \tfrac{\sqrt{2}}{2}$,\; $s_2 \,=\, 1$\, und\, $s_3\,=\, 1$,
+     \item eine sog. \glqq Milit"arprojektion \grqq\ mit den Angaben \,$\alpha\,= \,\ang{135}$, \;$\beta\,=\, \ang{135}$,\; $s_1 \,= \,1$,\, $s_2 \,=\, 1$\, und\, $s_3 \,=\, \tfrac{1}{2}$,
+     \item die isometrische Projektion aus Aufgabe~\ref{Standardiso},
+     \item die dimetrische Projektion aus Aufgabe~\ref{Dimetrie}.
+\end{itemize}
+\end{Aufgabe}
+%SPLITLoesung
+\begin{Loesung}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H1_A.png}
+	\caption{ „Kavalierprojektion“ oder „Kabinettprojektion“}
+	\label{fig:H1_A}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H1_B.png}
+	\caption{ Milit"arprojektion}
+	\label{fig:H1_B}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H1_C.png}
+	\caption{ Isometrische Projektion}
+	\label{fig:H1_C}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H1_D.png}
+	\caption{ Dimetrische Projektion}
+	\label{fig:H1_D}
+\end{figure}
+\end{Loesung}
+%SPLITAufgabe
+\label{Aufgabe_Kuboktaeder}
+\footnotesize\\[-4ex]
+Die Einheitsl"ange in dieser Aufgabe sei $\SI{10}{cm}$. Zeichnen Sie einen W"urfel mit Einheitskantenl"ange $\SI{10}{cm}$\, in parallelperspektivischer Darstellung. Um "Uberdeckungen hinten liegender Kanten durch vordere Kanten m"oglichst zu vermeiden, probieren Sie einmal die folgende Angaben aus:\; $\overrightarrow{O'E_1'} = \begin{psmallmatrix} - \SI{6}{cm}\\  - \SI{6}{cm}  \end{psmallmatrix}$,\,
+$\overrightarrow{O'E_2'} = \begin{psmallmatrix}  \SI{10}{cm}\\ - \SI{2}{cm}  \end{psmallmatrix}$,\, $\overrightarrow{O'E_3'} = \begin{psmallmatrix}  \SI{0}{cm}\\  \SI{10}{cm}  \end{psmallmatrix}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\small
+\begin{Teilaufgaben}
+\item Wie gro"s ist dann der Skalierungsfaktor \, $s_1 = \frac{ \left\| \overrightarrow{O'E_1'} \right\| }{10}$?
+\item  \textbf{\glqq Schneiden Sie\grqq} die acht Ecken des W"urfels durch Ebenen \glqq ab\grqq, welche die von den Ecken ausgehenden Kanten halbieren. Wieviele Fl"achen, Ecken und Kanten besitzt der so entstehende sogenannte \textbf{Kuboktaeder}?
+\item  "Uberpr"ufen Sie, ob die Anzahl\, $e$\, der Ecken, die Anzahl\, $f$\, der Fl"achen und die Anzahl\, $k$\, der Kanten \textbf{f"ur den Kuboktaeder} die Eulersche Polyederformel erf"ullt: \[e\, -\, k\, +\, f \; =\; 2.\]
+\item Bestimmen Sie die Anzahl\, $e_W$\, der Ecken, die Anzahl\, $f_W$\, der Fl"achen und die Anzahl\, $k_W$\, der Kanten  \textbf{f"ur den W"urfel} und "uberpf"ufen Sie auch hier die G"ultigkeit der Polyederformel.
+\item Wiederholen Sie die Aufgabe bei Verwendung einer Kavalierprojektion, wobei Sie zum Beispiel\, $\overrightarrow{O'E_1'} = \begin{psmallmatrix} - \SI{2}{cm}\\  - \SI{4}{cm}  \end{psmallmatrix}$\, oder auch\, $\overrightarrow{O'E_1'} = \begin{psmallmatrix} - \SI{4}{cm}\\ - \SI{2}{cm}  \end{psmallmatrix}$\, w"ahlen.
+\end{Teilaufgaben}
+\end{Aufgabe}
+%SPLITLoesung
+\begin{Loesung}
+\begin{Teilloesungen}
+
+\item Wir berechnen im folgenden den Skalierungsfaktor:
+\begin{align*}
+s_1 &= \frac{\sqrt{(-2)^{2}+(-4)^{2}}}{10}\\
+&= \frac{\sqrt{4+16}}{10}
+&= \frac{\sqrt{20}}{10}
+&= \frac{2 \cdot \sqrt{5}}{10}
+&= \frac{2 \cdot \sqrt{5}}{10}
+&\approx 0,45
+\end{align*}
+
+\item \textbf{Kuboktaeder:} \\
+Ecken($e$): 12\\
+Kanten($k$): 24\\
+Fl"achen:($f$): 14\\
+
+\item \begin{align*}
+12 - 24 + 14 = 2
+\end{align*}
+
+
+\item \begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H2_1.png}
+	\caption{Ansicht 1}
+	\label{fig:H2_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{MKB/UE_01/Hausuebungen/Grafiken/UE1_H2_2.png}
+	\caption{Ansicht 2}
+	\label{fig:H2_2}
+\end{figure}
+%SPLITAufgabe
+\label{Dimetrie}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\\[-5ex]
+{\def\largeur{14}
+\def\hauteur{8}
+\def\origine{(7,6)}
+\def\alpha{221.41}
+\def\beta{352.819}
+\def\Sfx{0.5}
+\def\Sfy{1}
+\def\Sfz{1}
+%\def\einheit{$\sqrt{3}$}
+\begin{center}
+%\begin{tikzpicture}[scale = 3]
+\begin{tikzpicture}[x=1cm, y=1cm, semitransparent]
+\draw[-, line width=0.5mm, red] \origine -- +(\alpha: \Sfx);
+\draw[-, line width=0.5mm, green] \origine -- +(\beta: \Sfy);
+\draw[-, line width=0.5mm, blue] \origine -- +(90: \Sfz);
+
+\begin{scope}
+    \clip(0,0) rectangle (\largeur,\hauteur);
+
+\foreach \i in {-30,...,30}
+\draw[-] ( {7 + \i*\Sfy*cos(\beta)},{6+\i*\Sfy*sin(\beta)}) --  + ( {20* \Sfx* cos(\alpha)}, {20* \Sfx* sin(\alpha)} );
+\foreach \i in {-30,...,30}
+\draw[-] ( {7 + \i*\Sfy*cos(\beta)},{6+\i*\Sfy*sin(\beta)}) --  + ( {-20* \Sfx* cos(\alpha)}, {-20* \Sfx* sin(\alpha)} );
+
+\foreach \i in {-30,...,30}
+\draw[-] ( {7 + \i*\Sfx*cos(\alpha)},{6+\i*\Sfx*sin(\alpha)}) --  + ( {20* \Sfy* cos(\beta)}, {20* \Sfy* sin(\beta)} );
+\foreach \i in {-30,...,30}
+\draw[-] ( {7 + \i*\Sfx*cos(\alpha)},{6+\i*\Sfx*sin(\alpha)}) --  + ( {-20* \Sfy* cos(\beta)}, {-20* \Sfy* sin(\beta)} );
+
+
+
+%\foreach \i in {-30,...,30}
+%%\draw[-] { \origine +  ( {\i * \Sfy * cos( {\beta + 180} ) },{\i * \Sfy * sin( {\beta + 180} )})  + (0,-\hauteur)} --  +(0,{2*\hauteur});
+%\draw[-] {\origine + \i *({\beta + 180}: \Sfy) + (0,-\hauteur) } --  + (0,{2*\hauteur});
+
+%\foreach \i in {-30,...,30}
+%\draw[-] ({7 + \i * \Sfy *cos(\beta ) } ,{6 + \Sfy *sin(\beta )-\hauteur}) --  +(0,2*\hauteur);
+
+\end{scope}
+
+\filldraw [black] \origine circle (2.5pt) node[below]{$O'$};
+\filldraw [red] {\origine  +(\alpha: \Sfx)} circle (2.5pt) node[below]{$E_1'$};
+\filldraw [green] {\origine +(\beta: \Sfy)} circle (2.5pt) node[below]{$E_2'$};
+\filldraw [blue] {\origine +(90: \Sfz)} circle (2.5pt) node[left]{$E_3'$};
+\draw [gray] \origine circle (1);
+
+\end{tikzpicture}
+\end{center}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{1ex}
+\small
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Teilaufgaben}
+%\setlength{\itemsep}{-0.5ex}
+\item \textbf{Zeichnen Sie} in die Skizze die Projektionsbilder der Koordinatenhalbachsen \textbf{ein}.
+\item \textbf{Stellen Sie} einen Glasw"urfel mit achsparallelen Kanten der L"ange\, $3$\, (L"angeneinheiten),
+%$\SI{3}{\centi\meter}$,
+dessen linker, hinterer, oberer Eckpunkt bei\, $(2,-4,0)$\, liegt, unter in der hier spezifizierten Parallelprojektion (Dimetrie bzw. Ingenieur-Axonometrie) \textbf{dar}.
+\\[0.5ex]
+{\footnotesize \textit{Hinweis: Wiederum h"angt die Angabe \glqq linker, hinterer, oberer Eckpunkt\grqq\ vom Betrachter ab, treffen Sie hier eine sinnvolle Wahl!}}
+\small
+\item Wie bewerten Sie diese Art der Darstellung bzgl. Anschaulichkeit und Handhabbarkeit?
+\item Bestimmen Sie die Verh"altnisse\, $\tfrac{s_1}{s_2}$\, und\, $\tfrac{s_3}{s_2}$\, sowie die "ubrigen axonometrische Angaben\, $\alpha$\, und \,$\beta$\, beispielsweise durch Messung mit einem Geodreieck.
+\end{Teilaufgaben}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{Aufgabe}
+%SPLITLoesung
+\begin{Loesung}
+Diese Aufabe wurde in der Vorlesung behandelt.
+\end{Loesung}

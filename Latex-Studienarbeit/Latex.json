@@ -1,0 +1,35 @@
+[
+  {
+    "studiengang": [
+      {
+        "uebungseinheit": 1,
+        "aufgaben": [
+          {
+            "P": [
+              {
+                "name": "Parallelprojektion -- Standardisometrie",
+                "aufgabennummer": 1
+              },
+              {
+                "name": "Quader in verschiedenen Projektionen\\label{Quader_1_verschiedene_PPen}",
+                "aufgabennummer": 2
+              }
+            ],
+            "H": [
+              {
+                "name": "Quader in verschiedenen Projektionen -- Reprise und Fortsetzung von Aufgabe~\ref{Quader_1_verschiedene_PPen}",
+                "aufgabennummer": 1
+              },
+              {
+                "name": "Dimetrische Projektion nach DIN ISO 5456-3 (Ingenieur-Axonometrie)",
+                "aufgabennummer": 2
+              }
+            ],
+            "T": [
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
