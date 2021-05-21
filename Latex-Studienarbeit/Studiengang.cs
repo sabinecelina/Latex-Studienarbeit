@@ -10,5 +10,18 @@ namespace Latex_Studienarbeit
     {
         public int uebungseinheit;
         public List<Aufgaben> aufgaben;
+        public Studiengang(int uebungseinheit, List<Aufgaben> aufgaben)
+        {
+            this.uebungseinheit = uebungseinheit;
+            this.aufgaben = aufgaben;
+        }
+        public int getUebungseinheit()
+        {
+            return this.uebungseinheit;
+        }
+        public List<Aufgaben> getListAufgaben()
+        {
+            return this.aufgaben;
+        }
     }
 }

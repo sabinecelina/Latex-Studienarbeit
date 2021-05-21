@@ -9,6 +9,18 @@ namespace Latex_Studienarbeit
     class Uebungen
     {
         public string name;
-        public string aufgabennummer;
+        public int aufgabennummer;
+        public Uebungen(string name, int aufgabennummer) {
+            this.name = name;
+            this.aufgabennummer = aufgabennummer;
+        }
+        public string getName()
+        {
+            return this.name;
+        }
+        public int getAufgabennummer()
+        {
+            return this.aufgabennummer;
+        }
     }
 }

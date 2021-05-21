@@ -9,8 +9,8 @@ namespace Latex_Studienarbeit
         {
             //CreateDatabase.CreateDatabaseSQLite();
             //CreateDatabase.InsertIntoDatabase();
-            //ReadFromDatabase.Read();
-            ReadJson.readJson();
+            ReadFromDatabase.Read();
+            //ReadJson.readJson();
         }
     }
 }

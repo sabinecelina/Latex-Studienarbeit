@@ -25,17 +25,16 @@ namespace Latex_Studienarbeit
             SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
             m_dbConnection.Open();
             string sql = "";
+            ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1) oder Aufgaben exportieren(2)?", ConsoleColor.DarkBlue);
+            int auswahl = Convert.ToInt32(Console.ReadLine());
+            if(auswahl == 1)
+            {
+                ChangeEntry.ChangeTexEntry();
+            }
             ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
             int numberUebungseinheitUserInput = Convert.ToInt32(Console.ReadLine());
-            switch (numberUebungseinheitUserInput)
-            {
-                case 1:
-                    AskIfExist(m_dbConnection, 1);
-                    break;
-                case 2:
-                    AskIfExist(m_dbConnection, 2);
-                    break;
-            }
+            AskIfExist(m_dbConnection, numberUebungseinheitUserInput);
+
             ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
             int numberUserInput = Convert.ToInt32(Console.ReadLine());
             if (numberUserInput == 1)
