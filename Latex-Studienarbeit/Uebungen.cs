@@ -22,5 +22,13 @@ namespace Latex_Studienarbeit
         {
             return this.aufgabennummer;
         }
+        public void setName(string name)
+        {
+            this.name = name;
+        }
+        public void setAufgabennummer(int aufgabennummer)
+        {
+           this.aufgabennummer = aufgabennummer;
+        }
     }
 }
