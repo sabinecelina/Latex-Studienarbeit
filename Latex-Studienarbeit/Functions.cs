@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using System;
 
 namespace Latex_Studienarbeit
 {
@@ -21,8 +22,15 @@ namespace Latex_Studienarbeit
         }
         public static string ReplaceStringToText(string text)
         {
-            return text.Replace(@"\", "slash").Replace("\"", "anfuerungszeichen")
-                                                .Replace("\'", "replacedonesign").Replace(@"$", "dollar");
+            return text.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
+                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+        }
+        public static void ConsoleWrite(string text, ConsoleColor backgroundcolor)
+        {
+            Console.BackgroundColor = backgroundcolor;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
     }
 }

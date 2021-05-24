@@ -12,12 +12,12 @@ namespace Latex_Studienarbeit
         public static SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void UpdateTexEntry()
         {
-            ReadFromDatabase.ConsoleWrite("Welche Aufgabe moechten Sie aendern? Tippen Sie wie folgt ein: 1,P,8", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgabe moechten Sie aendern? Tippen Sie wie folgt ein: 1,P,8", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInput = getUserInput.Split(",");
             while (userInput.Length != 3)
             {
-                ReadFromDatabase.ConsoleWrite("Sie haben die Aufgabe nicht richtig eingeschrieben. Versuchen Sie es erneut: 1,P,8", ConsoleColor.DarkBlue);
+                Functions.ConsoleWrite("Sie haben die Aufgabe nicht richtig eingeschrieben. Versuchen Sie es erneut: 1,P,8", ConsoleColor.DarkBlue);
                 getUserInput = Console.ReadLine();
                 userInput = getUserInput.Split(",");
             }
@@ -49,16 +49,16 @@ namespace Latex_Studienarbeit
         public static void ChangeOrderinDatabase()
         {
             m_dbConnection.Open();
-            ReadFromDatabase.ConsoleWrite("In welcher Uebungseinheit und Uebungsart moechten Sie die Reihenfolge aendern 1,P?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("In welcher Uebungseinheit und Uebungsart moechten Sie die Reihenfolge aendern 1,P?", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInputArray = getUserInput.Split(",");
             while (userInputArray.Length != 2)
             {
-                ReadFromDatabase.ConsoleWrite("Das Eingabeformat war leider falsch, bitte versuchen Sie es erneut.", ConsoleColor.DarkRed);
+                Functions.ConsoleWrite("Das Eingabeformat war leider falsch, bitte versuchen Sie es erneut.", ConsoleColor.DarkRed);
                 getUserInput = Console.ReadLine();
                 userInputArray = getUserInput.Split(",");
             }
-            ReadFromDatabase.ConsoleWrite("Sie haben folgende Uebungen, deren Reihenfolge Sie aendern koennen.", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Sie haben folgende Uebungen, deren Reihenfolge Sie aendern koennen.", ConsoleColor.DarkBlue);
             string sql = "select NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit='" + userInputArray[0] + "' and Uebungsart='" + userInputArray[1] + "'";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -75,7 +75,7 @@ namespace Latex_Studienarbeit
             }
             for (int i = 0; i < aufgaben.Count; i++)
             {
-                ReadFromDatabase.ConsoleWrite("\n" + aufgabennummern[i] + " || " + aufgaben[i], ConsoleColor.DarkRed);
+                Functions.ConsoleWrite("\n" + aufgabennummern[i] + " || " + aufgaben[i], ConsoleColor.DarkRed);
             }
             List<Uebungen> uebungen = new List<Uebungen>();
             for (int j = 0; j < aufgaben.Count; j++)
@@ -83,7 +83,7 @@ namespace Latex_Studienarbeit
                 Uebungen uebung = new Uebungen(aufgaben[j], Int32.Parse(aufgabennummern[j]));
                 uebungen.Add(uebung);
             }
-            ReadFromDatabase.ConsoleWrite("Welche Aufgaben moechten sie tauschen? [1,2]", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgaben moechten sie tauschen? [1,2]", ConsoleColor.DarkBlue);
             getUserInput = Console.ReadLine();
             userInputArray = getUserInput.Split(",");
             for (int i = 0; i < uebungen.Count; i++)

@@ -8,81 +8,92 @@ namespace Latex_Studienarbeit
 {
     class ExportData
     {
-        private static string[] uebungen = new string[] { "preasuebg-", "hausuebg-.tex", "tutorium-.tex" };
+        private static string[] uebungen = new string[] { "preasuebg-", "hausuebg-", "tutorium-" };
         private static string[] uebungsart = new string[] { "P", "H", "T" };
+        public static void SetUebungseinheitNumber(int number)
+        {
+            uebungen[0] = uebungen[0] + number + ".tex";
+            uebungen[1] = uebungen[1] + number + ".tex";
+            uebungen[2] = uebungen[2] + number + ".tex";
+        }
         public static string ExportAufgaben(SQLiteDataReader reader)
         {
             string aufgabe = "";
             aufgabe = reader["Uebungsaufgabe"].ToString();
-            aufgabe = aufgabe.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
-                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+            aufgabe = Functions.ReplaceStringToText(aufgabe);
             return aufgabe;
         }
         public static string ExportLoesungen(SQLiteDataReader reader)
         {
             string loesung = "";
             loesung = reader["Loesung"].ToString();
-            loesung = loesung.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
-                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+            loesung = Functions.ReplaceStringToText(loesung);
             return loesung;
         }
-        public static void ExportUebungenAndLoesungen(string userInput, SQLiteConnection m_dbConnection, int number)
+        public static void ExportUebungen(string userInput, SQLiteConnection m_dbConnection, int number, int auswahl)
         {
-            uebungen[0] = uebungen[0] + number + ".tex";
-            uebungen[1] = uebungen[1] + number + ".tex";
+            SetUebungseinheitNumber(number);
             string sql;
-            if (userInput.Equals("P") || userInput.Equals("p"))
+            string[] input = userInput.Split(",");
+            int caseNumber = 0;
+            string uebungsart = "";
+            string moeglichkeit = "";
+            switch (auswahl)
             {
-                sql = "select Uebungsaufgabe, Loesung from MKB where Uebungsart='P' AND Uebungseinheit='"+number+"'";
-                CreatePath(sql, m_dbConnection, uebungen[0], 3);
+                case 1:
+                    moeglichkeit = "Uebungsaufgabe, Loesung";
+                    caseNumber = 1;
+                    break;
+                case 2:
+                    moeglichkeit = "Uebungsaufgabe";
+                    caseNumber = 2;
+                    break;
+                case 3:
+                    moeglichkeit = "Loesung";
+                    caseNumber = 3;
+                    break;
             }
-            else if (userInput.Equals("H") || userInput.Equals("h"))
+            if (input.Length == 1)
             {
-                sql = "select Uebungsaufgabe, Loesung from MKB where Uebungsart='H' AND Uebungseinheit='" + number + "'";
-                CreatePath(sql, m_dbConnection, uebungen[1], 3);
+                uebungsart = ReturnUebungsart(input[0]);
+                sql = "select "+ moeglichkeit + " from MKB where Uebungsart='" +  input[0] + "' AND Uebungseinheit='" + number + "'";
+                CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
             }
-            else if (userInput.Equals("PH") || userInput.Equals("ph"))
+            else if(input.Length == 2)
             {
-                sql = "select Uebungsaufgabe, Loesung from MKB where Uebungsart='P' AND Uebungseinheit='" + number + "'";
-                CreatePath(sql, m_dbConnection, uebungen[0], 3);
-                sql = "select Uebungsaufgabe, Loesung from MKB where Uebungsart='H' AND Uebungseinheit='" + number + "'";
-                CreatePath(sql, m_dbConnection, uebungen[1], 3);
+                uebungsart = ReturnUebungsart(input[0]);
+                sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[0] + "' AND Uebungseinheit='" + number + "'";
+                CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
+                uebungsart = ReturnUebungsart(input[1]);
+                sql = "select" + moeglichkeit + " from MKB where Uebungsart='" + input[1] +"' AND Uebungseinheit='" + number + "'";
+                CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
+            }
+            else if(input.Length == 3)
+            {
+                for(int i = 0; i<input.Length; i++)
+                {
+                    uebungsart = ReturnUebungsart(input[i]);
+                    sql = "select" + moeglichkeit + " from MKB where Uebungsart='" + input[i] + "' AND Uebungseinheit='" + number + "'";
+                    CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
+                }
+            }
+            else if(input.Length > 3 || input.Length < 0)
+            {
+                Functions.ConsoleWrite("Die Eingabe war leider ungueltig.", ConsoleColor.DarkYellow);
             }
         }
-        public static void ExportUebungen(string userInput2, SQLiteConnection m_dbConnection)
-        {
-            string sql;
-            if (userInput2.Equals("P"))
-            {
-                sql = "select Uebungsaufgabe from MKB where Uebungsart='P'";
-                CreatePath(sql, m_dbConnection, uebungen[0], 1);
-            }
-            else if (userInput2.Equals("H"))
-            {
-                sql = "select Uebungsaufgabe from MKB where Uebungsart='H'";
-                CreatePath(sql, m_dbConnection, uebungen[1], 1);
-            }
-            else if (userInput2.Equals("PH"))
-            {
-                sql = "select Uebungsaufgabe from MKB where Uebungsart='P'";
-                CreatePath(sql, m_dbConnection, uebungen[0], 1);
-                sql = "select Uebungsaufgabe from MKB where Uebungsart='H'";
-                CreatePath(sql, m_dbConnection, uebungen[1], 1);
-            }
-        }
-        public static void ExportLoesungenTex(SQLiteConnection m_dbConnection)
+        public static void ExportLoesungenTex(SQLiteConnection m_dbConnection, int number)
         {
             string sql;
             sql = "select Loesung from MKB";
-            CreatePath(sql, m_dbConnection, "loesungen.tex", 2);
+            CreatePath(sql, m_dbConnection, "loesungen-" + number + ".tex", 2);
             Console.WriteLine("Es wurde eine neue loesung.tex Datei erstellt");
         }
         public static string ExportNameDerAufgabe(SQLiteDataReader reader)
         {
             string aufgabe = "";
             aufgabe = reader["NameDerAufgabe"].ToString();
-            aufgabe = aufgabe.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
-                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+            aufgabe = Functions.ReplaceStringToText(aufgabe);
             return aufgabe;
         }
         public static string ExportUebungsnummer(SQLiteDataReader reader)
@@ -90,6 +101,22 @@ namespace Latex_Studienarbeit
             string nummer = "";
             nummer = reader["Uebungsnummer"].ToString();
             return nummer;
+        }
+        public static string ReturnUebungsart(string uebungsart)
+        {
+            switch (uebungsart)
+            {
+                case "P":
+                    uebungsart = uebungen[0];
+                    break;
+                case "H":
+                    uebungsart = uebungen[1];
+                    break;
+                case "T":
+                    uebungsart = uebungen[2];
+                    break;
+            }
+            return uebungsart;
         }
         public static void CreatePath(string sql, SQLiteConnection m_dbConnection, string filepath, int exportArt)
         {
@@ -106,16 +133,16 @@ namespace Latex_Studienarbeit
                 {
                     case 1:
                         aufgabe = ExportData.ExportAufgaben(reader);
-                        aufgaben.Add(aufgabe);
+                        loesung = ExportData.ExportLoesungen(reader);
+                        aufgaben.Add(aufgabe + loesung);
                         break;
                     case 2:
-                        loesung = ExportData.ExportLoesungen(reader);
-                        aufgaben.Add(loesung);
+                        aufgabe = ExportData.ExportAufgaben(reader);
+                        aufgaben.Add(aufgabe);
                         break;
                     case 3:
-                        aufgabe = ExportData.ExportAufgaben( reader);
-                        loesung = ExportData.ExportLoesungen( reader);
-                        aufgaben.Add(aufgabe + loesung);
+                        loesung = ExportData.ExportLoesungen(reader);
+                        aufgaben.Add(loesung);
                         break;
                 }
             }
