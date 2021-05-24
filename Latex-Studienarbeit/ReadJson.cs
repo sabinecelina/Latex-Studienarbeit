@@ -27,39 +27,45 @@ namespace Latex_Studienarbeit
         {
             string[] uebungsart = new string[] { "P", "H", "T" };
             List<Uebungen> uebungen = new List<Uebungen>();
-            for (int j = 0; j < uebungsart.Length; j++)
+            for (int m = 0; m < 2; m++)
             {
-                switch (uebungsart[j])
+                for (int j = 0; j < uebungsart.Length; j++)
                 {
-                    case "P":
-                        for (int i = 0; i < mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getP().Count; i++)
-                            uebungen.Add(mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getP()[i]);
-                        break;
-                    case "H":
-                        for (int i = 0; i < mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getH().Count; i++)
-                            uebungen.Add(mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getH()[i]);
-                        break;
-                    case "T":
-                        bool check = false;
-                        if ((mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getT() == null))
-                            check = true;
-                        if (check)
-                        {
-                            for (int i = 0; i < mathematikZwei[0].getStudiengang()[0].getListAufgaben().Count; i++)
-                                uebungen.Add(mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getT()[i]);
-                        }
-                        break;
+                    int zeigen = mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getT().Count;
+                    Console.WriteLine(zeigen);
+                    switch (uebungsart[j])
+                    {
+                        case "P":
+                            for (int i = 0; i < mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getP().Count; i++)
+                                uebungen.Add(mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getP()[i]);
+                            break;
+                        case "H":
+                            for (int i = 0; i < mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getH().Count; i++)
+                                uebungen.Add(mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getH()[i]);
+                            break;
+                        case "T":
+                            bool check = false;
+                            if ((mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getT().Count != 0))
+                                check = true;
+                            if (check)
+                            {
+                                for (int i = 0; i < mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getT().Count; i++)
+                                    uebungen.Add(mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getT()[i]);
+                            }
+                            break;
+                    }
+                    foreach (Uebungen uebung in uebungen)
+                    {
+                        string nameDerAufgabe = uebung.getName();
+                        nameDerAufgabe = Functions.ReplaceStringToDB(nameDerAufgabe);
+                        int uebungseinheit = mathematikZwei[0].getStudiengang()[m].getUebungseinheit();
+                        int aufgabennummer = uebung.getAufgabennummer();
+                        string sql = ("update MKB set NameDerAufgabe='" + nameDerAufgabe + "' where Uebungseinheit=" + uebungseinheit + " AND Uebungsart='" + uebungsart[j] + "' AND Uebungsnummer=" + aufgabennummer + "");
+                        Functions.sqlStatement(sql);
+                    }
+                    uebungen.Clear();
                 }
-                foreach (Uebungen uebung in uebungen)
-                {
-                    string nameDerAufgabe = uebung.getName();
-                    nameDerAufgabe = Functions.ReplaceStringToDB(nameDerAufgabe);
-                    int uebungseinheit = mathematikZwei[0].getStudiengang()[0].getUebungseinheit();
-                    int aufgabennummer = uebung.getAufgabennummer();
-                    string sql = ("update MKB set NameDerAufgabe='" + nameDerAufgabe + "' where Uebungseinheit=" + uebungseinheit + " AND Uebungsart='" + uebungsart[j] + "' AND Uebungsnummer=" + aufgabennummer + "");
-                    Functions.sqlStatement(sql);
-                }
-                uebungen.Clear();
+
             }
         }
     }

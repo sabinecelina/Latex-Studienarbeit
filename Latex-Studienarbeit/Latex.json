@@ -33,7 +33,57 @@
             ]
           }
         ]
+      },
+      {
+        "uebungseinheit": 2,
+        "aufgaben": [
+          {
+            "P": [
+              {
+                "name": "Analyse von Kavalierprojektionen",
+                "aufgabennummer": 3
+              },
+              {
+                "name": "Analyse von Kavalierprojektionen - Fortsetzung",
+                "aufgabennummer": 4
+              }
+            ],
+            "H": [
+              {
+                "name": "Castellum",
+                "aufgabennummer": 4
+              },
+              {
+                "name": "Dynamische veränderbare Darstellungen mit Geogebra",
+                "aufgabennummer": 5
+              },
+              {
+                "name": "Koordinatenquader – Koordinatenbestimmung",
+                "aufgabennummer": 6
+              },
+              {
+                "name": "Fortsetzung der Analyse von Aufgabe~\\ref{Analyse_KavProj} -- Projektion auf verschiedene Ebenen\\label{KavProj_AndereBildebene}",
+                "aufgabennummer": 7
+              }
+            ],
+            "T": [
+              {
+                "name": "Günstige und weniger günstige Parallelperspektiven",
+                "aufgabennummer": 1
+              },
+              {
+                "name": "Pyramidenstumpf in Kavalierprojektion",
+                "aufgabennummer": 2
+              },
+              {
+                "name": "Parallelprojektionen in die Aufrissebene",
+                "aufgabennummer": 3
+              }
+            ]
+          }
+        ]
       }
+
     ]
   }
 ]

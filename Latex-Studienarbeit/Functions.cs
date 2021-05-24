@@ -18,12 +18,12 @@ namespace Latex_Studienarbeit
         public static string ReplaceStringToDB(string text)
         {
             return text.Replace(@"\", "slash").Replace("\"", "anfuerungszeichen")
-                                                .Replace("\'", "replacedonesign").Replace(@"$", "dollar");
+                                                .Replace("\'", "replacedonesign").Replace(@"$", "dollar").Replace("-", "minus");
         }
         public static string ReplaceStringToText(string text)
         {
             return text.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
-                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+                .Replace("replacedonesign", "\'").Replace("dollar", @"$").Replace("minus", "-");
         }
         public static void ConsoleWrite(string text, ConsoleColor backgroundcolor)
         {

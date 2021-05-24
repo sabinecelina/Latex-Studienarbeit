@@ -3,13 +3,14 @@ using System.IO;
 using System.Text;
 using System.Data.SQLite;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Latex_Studienarbeit
 {
     class CreateDatabase
     {
         private static List<string> fileName = new List<string>();
-        private static List<Uebungen> uebungen_db = new List<Uebungen>();
+        private static List<string> uebungen_db = new List<string>();
 
         /** get all MKB Files in Folder MKB-1*/
         public static void GetAllFiles()
@@ -20,10 +21,23 @@ namespace Latex_Studienarbeit
             {
                 fileName.Add(file.Name);
             }
-            fileName.Reverse();
-            for (int i = 0; i < fileName.Count; i++)
+            //sortList();
+            fileName.Sort();
+        }
+        public static void sortList()
+        {
+            string[] array = new string[] { "p", "h", "t" };
+             List<string> uebungen = new List<string>();
+            for(int i = 0; i<2; i++)
             {
-                Console.WriteLine(fileName[i]);
+                string ii = i.ToString();
+                for (int j = 0; j < fileName.Count; j++)
+                {
+                    if (fileName[j].Contains(ii))
+                    {
+                        Console.WriteLine(fileName[j]);
+                    }
+                }
             }
         }
         /** create Table MKB */
@@ -44,7 +58,7 @@ namespace Latex_Studienarbeit
             int tnumber = 1;
             for (int m = 0; m < fileName.Count; m++)
             {
-                string uebungsart = fileName[m].Substring(0, 1);
+                string uebungsart = fileName[m].Substring(1, 1);
                 uebungsart = uebungsart.ToUpper();
                 char getNumber = fileName[m][fileName[m].Length - 5];
                 string uebungseinheit = "";
@@ -71,7 +85,8 @@ namespace Latex_Studienarbeit
                     if (aufgabenUndLoesungGetrennt.Length == 1)
                     {
                         loesung[i] = "NULL";
-                    } else
+                    }
+                    else
                     {
                         loesung[i] = aufgabenUndLoesungGetrennt[1];
                     }
