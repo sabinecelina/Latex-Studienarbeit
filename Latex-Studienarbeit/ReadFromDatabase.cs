@@ -12,27 +12,46 @@ namespace Latex_Studienarbeit
         private static SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void Read()
         {
-
             m_dbConnection.Open();
-
-            Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgaben exportieren(2)oder eine neue Aufgabe hinzufuegen (3)?", ConsoleColor.DarkBlue);
-            int auswahl = Convert.ToInt32(Console.ReadLine());
-            if (auswahl == 1)
+            Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgaben exportieren(2) oder eine neue Aufgabe hinzufuegen (3)?", ConsoleColor.DarkBlue);
+            while (true)
             {
-                ChangeEntry.UpdateTexEntry();
+                try
+                {
+                    int auswahl = Convert.ToInt32(Console.ReadLine());
+                    if (auswahl == 1)
+                    {
+                        ChangeEntry.UpdateTexEntry();
+                    }
+                    if (auswahl == 2)
+                    {
+                        Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
+                        while (true)
+                        {
+                            try
+                            {
+                                int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
+                                AskIfExist(m_dbConnection, uebungseinheit_number);
+                                Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
+                                int numberUserInput = Convert.ToInt32(Console.ReadLine());
+                                ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+                            }
+                            catch (Exception e)
+                            {
+                                Functions.ConsoleWrite("Ihre Angaben konnten nicht gelesen werden, bitte versuchen Sie es erneut", ConsoleColor.DarkRed);
+                                continue;
+                            }
+                            break;
+                        }
+                    }
+                    else
+                        throw new Exception();
+                } catch(Exception e) {
+                    Functions.ConsoleWrite("Ihre Angaben konnten nicht gelesen werden, bitte versuchen Sie es erneut", ConsoleColor.DarkRed);
+                    continue;
+                }
+                break;
             }
-            if (auswahl == 2)
-            {
-                Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
-                string input = Console.ReadLine();
-                int uebungseinheit_number = Convert.ToInt32(input);
-                AskIfExist(m_dbConnection, uebungseinheit_number);
-                Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
-                int numberUserInput = Convert.ToInt32(Console.ReadLine());
-                ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
-
-            }
-            else Functions.ConsoleWrite("Ihre Angaben konnten nicht gelesen werden, bitte versuchen Sie es erneut", ConsoleColor.DarkBlue);
             m_dbConnection.Close();
         }
         public static void ExportUebungseinheit()
