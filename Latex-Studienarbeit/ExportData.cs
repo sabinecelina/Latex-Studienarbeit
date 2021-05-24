@@ -28,6 +28,10 @@ namespace Latex_Studienarbeit
             string loesung = "";
             loesung = reader["Loesung"].ToString();
             loesung = Functions.ReplaceStringToText(loesung);
+            if (loesung.Equals("NULL"))
+            {
+                loesung = "zu dieser Aufgabe existiert noch keine Loesung";
+            }
             return loesung;
         }
         public static void ExportUebungen(string userInput, SQLiteConnection m_dbConnection, int number, int auswahl)
@@ -65,7 +69,7 @@ namespace Latex_Studienarbeit
                 sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[0] + "' AND Uebungseinheit='" + number + "'";
                 CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
                 uebungsart = ReturnUebungsart(input[1]);
-                sql = "select" + moeglichkeit + " from MKB where Uebungsart='" + input[1] +"' AND Uebungseinheit='" + number + "'";
+                sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[1] +"' AND Uebungseinheit='" + number + "'";
                 CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
             }
             else if(input.Length == 3)
@@ -73,7 +77,7 @@ namespace Latex_Studienarbeit
                 for(int i = 0; i<input.Length; i++)
                 {
                     uebungsart = ReturnUebungsart(input[i]);
-                    sql = "select" + moeglichkeit + " from MKB where Uebungsart='" + input[i] + "' AND Uebungseinheit='" + number + "'";
+                    sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[i] + "' AND Uebungseinheit='" + number + "'";
                     CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
                 }
             }
@@ -142,6 +146,7 @@ namespace Latex_Studienarbeit
                         break;
                     case 3:
                         loesung = ExportData.ExportLoesungen(reader);
+                        aufgaben.Add("%NameDerAufgabe");
                         aufgaben.Add(loesung);
                         break;
                 }
