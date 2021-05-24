@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Latex_Studienarbeit
 {
-    class Mathe2
+    class Mathematik
     {
         public List<Studiengang> studiengang;
 
-        public Mathe2(List<Studiengang> studiengang)
+        public Mathematik(List<Studiengang> studiengang)
         {
             this.studiengang = studiengang;
         }

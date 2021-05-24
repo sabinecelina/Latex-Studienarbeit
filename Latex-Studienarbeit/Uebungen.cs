@@ -8,8 +8,10 @@ namespace Latex_Studienarbeit
 {
     class Uebungen
     {
-        public string name;
-        public int aufgabennummer;
+        private string name;
+        private int aufgabennummer;
+        private string aufgabe;
+        private string loesungen;
         public Uebungen(string name, int aufgabennummer) {
             this.name = name;
             this.aufgabennummer = aufgabennummer;

@@ -7,9 +7,9 @@ namespace Latex_Studienarbeit
     {
         static void Main(string[] args)
         {
-            //createAndInsertIntoDatabase();
-            ReadFromDatabase.Read();
-            //ChangeEntry.ChangeOrderinDatabase();
+            createAndInsertIntoDatabase();
+           ReadFromDatabase.Read();
+           //ChangeEntry.ChangeOrderinDatabase();
         }
         public static void createAndInsertIntoDatabase()
         {

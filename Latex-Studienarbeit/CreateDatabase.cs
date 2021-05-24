@@ -8,51 +8,48 @@ namespace Latex_Studienarbeit
 {
     class CreateDatabase
     {
-        private static string connectionPath = @"Data Source=..\..\..\..\MKB.sqlite;Version=3;";
-        private static List<string> uebungen = new List<string>();
+        private static List<string> fileName = new List<string>();
+        private static List<Uebungen> uebungen_db = new List<Uebungen>();
+
+        /** get all MKB Files in Folder MKB-1*/
         public static void GetAllFiles()
         {
             DirectoryInfo d = new DirectoryInfo(@"..\..\..\..\MKB-1\");//Assuming Test is your Folder
             FileInfo[] Files = d.GetFiles("*.tex"); //Getting Text files
             foreach (FileInfo file in Files)
             {
-                uebungen.Add(file.Name);
+                fileName.Add(file.Name);
             }
-            uebungen.Reverse();
-            for (int i = 0; i < uebungen.Count; i++)
+            fileName.Reverse();
+            for (int i = 0; i < fileName.Count; i++)
             {
-                Console.WriteLine(uebungen[i]);
+                Console.WriteLine(fileName[i]);
             }
         }
+        /** create Table MKB */
         public static void CreateDatabaseSQLite()
         {
             GetAllFiles();
             SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
-
-            SQLiteConnection m_dbConnection = new SQLiteConnection(connectionPath);
-            m_dbConnection.Open();
-
-            string sql = "create table MKB (Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            command.ExecuteNonQuery();
-            m_dbConnection.Close();
+            string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
+            Functions.sqlStatement(sql);
         }
+
+        /** insert information into Database*/
         public static void InsertIntoDatabase()
         {
-            SQLiteConnection m_dbConnection = new SQLiteConnection(connectionPath);
-            m_dbConnection.Open();
-            // Read the file and display it line by line.
+            int id = 1;
             int pnumber = 1;
             int hnumber = 1;
             int tnumber = 1;
-            for (int m = 0; m < uebungen.Count; m++)
+            for (int m = 0; m < fileName.Count; m++)
             {
-                string uebungsart = uebungen[m].Substring(0, 1);
+                string uebungsart = fileName[m].Substring(0, 1);
                 uebungsart = uebungsart.ToUpper();
-                char var = uebungen[m][uebungen[m].Length - 5];
+                char getNumber = fileName[m][fileName[m].Length - 5];
                 string uebungseinheit = "";
                 string line = "";
-                string filename = @"..\..\..\..\MKB-1\" + uebungen[m];
+                string filename = @"..\..\..\..\MKB-1\" + fileName[m];
                 System.IO.StreamReader file =
                     new System.IO.StreamReader(filename);
                 while ((line = file.ReadLine()) != null)
@@ -67,12 +64,17 @@ namespace Latex_Studienarbeit
                 {
                     int number = 0;
                     //zuerst werden die Eintraege Datenbanksicher umgeschrieben
-                    aufgabenMitLoesungen[i] = aufgabenMitLoesungen[i].Replace(@"\", "slash").Replace("\"", "anfuerungszeichen")
-                                                .Replace("\'", "replacedonesign").Replace(@"$", "dollar");
+                    aufgabenMitLoesungen[i] = Functions.ReplaceStringToDB(aufgabenMitLoesungen[i]);
                     //AufgabenUndLoesungen getrennt beinhaltet einen Array der Laenge 2, im ersten Eintrag befindet sich die Aufgabe, im zweiten Eintrag die Loesung
                     string[] aufgabenUndLoesungGetrennt = aufgabenMitLoesungen[i].Split(new string[] { "SPLITLoesung" }, StringSplitOptions.RemoveEmptyEntries);
                     aufgabe[i] = aufgabenUndLoesungGetrennt[0];
-                    loesung[i] = aufgabenUndLoesungGetrennt[1];
+                    if (aufgabenUndLoesungGetrennt.Length == 1)
+                    {
+                        loesung[i] = "NULL";
+                    } else
+                    {
+                        loesung[i] = aufgabenUndLoesungGetrennt[1];
+                    }
                     switch (uebungsart)
                     {
                         case "P":
@@ -88,13 +90,11 @@ namespace Latex_Studienarbeit
                             tnumber++;
                             break;
                     }
-                    string sql = "insert into MKB (Uebungseinheit, Uebungsnummer,  Uebungsart,WirdVerwendet,  Uebungsaufgabe, Loesung) values ('" + var + "', '" + number + "', '" + uebungsart + "', '0', '" + aufgabe[i] + "', '" + loesung[i] + "')";
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    command.ExecuteNonQuery();
-                    number++;
+                    string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart,WirdVerwendet,  Uebungsaufgabe, Loesung) values ('" + id + "','" + getNumber + "', '" + number + "', '" + uebungsart + "', '0', '" + aufgabe[i] + "', '" + loesung[i] + "')";
+                    Functions.sqlStatement(sql);
+                    id++;
                 }
             }
-            m_dbConnection.Close();
         }
 
     }

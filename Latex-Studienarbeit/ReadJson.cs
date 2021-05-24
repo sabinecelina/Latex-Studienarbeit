@@ -13,23 +13,18 @@ namespace Latex_Studienarbeit
 {
     class ReadJson
     {
-        public static List<Mathe2> mathematikZwei = new List<Mathe2>();
+        public static List<Mathematik> mathematikZwei = new List<Mathematik>();
         public static void readJson()
         {
             string path = "../../../Latex.json";
             using (StreamReader r = new StreamReader(path))
             {
                 string json = r.ReadToEnd();
-                Console.WriteLine(json);
-                mathematikZwei = JsonConvert.DeserializeObject<List<Mathe2>>(json);
-                Console.WriteLine(mathematikZwei[0].getStudiengang()[0].getListAufgaben()[0].getP()[0].getName());
+                mathematikZwei = JsonConvert.DeserializeObject<List<Mathematik>>(json);
             }
         }
         public static void ChangeDatabaseEntry()
         {
-            SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
-            m_dbConnection.Open();
-            string sql = "";
             string[] uebungsart = new string[] { "P", "H", "T" };
             List<Uebungen> uebungen = new List<Uebungen>();
             for (int j = 0; j < uebungsart.Length; j++)
@@ -58,13 +53,11 @@ namespace Latex_Studienarbeit
                 foreach (Uebungen uebung in uebungen)
                 {
                     string nameDerAufgabe = uebung.getName();
-                    nameDerAufgabe = nameDerAufgabe.Replace(@"\", "slash").Replace("\"", "anfuerungszeichen")
-                                                    .Replace("\'", "replacedonesign").Replace(@"$", "dollar");
+                    nameDerAufgabe = Functions.ReplaceStringToDB(nameDerAufgabe);
                     int uebungseinheit = mathematikZwei[0].getStudiengang()[0].getUebungseinheit();
                     int aufgabennummer = uebung.getAufgabennummer();
-                    sql = ("update MKB set NameDerAufgabe='" + nameDerAufgabe + "' where Uebungseinheit=" + uebungseinheit + " AND Uebungsart='" + uebungsart[j] + "' AND Uebungsnummer=" + aufgabennummer + "");
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    command.ExecuteNonQuery();
+                    string sql = ("update MKB set NameDerAufgabe='" + nameDerAufgabe + "' where Uebungseinheit=" + uebungseinheit + " AND Uebungsart='" + uebungsart[j] + "' AND Uebungsnummer=" + aufgabennummer + "");
+                    Functions.sqlStatement(sql);
                 }
                 uebungen.Clear();
             }
