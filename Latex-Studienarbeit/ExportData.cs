@@ -30,7 +30,7 @@ namespace Latex_Studienarbeit
             loesung = Functions.ReplaceStringToText(loesung);
             if (loesung.Equals("NULL"))
             {
-                loesung = "zu dieser Aufgabe existiert noch keine Loesung";
+                loesung = "%zu dieser Aufgabe existiert noch keine Loesung";
             }
             return loesung;
         }
@@ -90,7 +90,7 @@ namespace Latex_Studienarbeit
         {
             string sql;
             sql = "select Loesung from MKB";
-            CreatePath(sql, m_dbConnection, "loesungen-" + number + ".tex", 2);
+            CreatePath(sql, m_dbConnection, "loesungen-" + number + ".tex", 3);
             Console.WriteLine("Es wurde eine neue loesung.tex Datei erstellt");
         }
         public static string ExportNameDerAufgabe(SQLiteDataReader reader)
@@ -146,7 +146,7 @@ namespace Latex_Studienarbeit
                         break;
                     case 3:
                         loesung = ExportData.ExportLoesungen(reader);
-                        aufgaben.Add("%NameDerAufgabe");
+                        loesung = loesung + "%NameDerAufgabe \n";
                         aufgaben.Add(loesung);
                         break;
                 }
