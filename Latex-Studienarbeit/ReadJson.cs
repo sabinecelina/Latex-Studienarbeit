@@ -31,8 +31,6 @@ namespace Latex_Studienarbeit
             {
                 for (int j = 0; j < uebungsart.Length; j++)
                 {
-                    int zeigen = mathematikZwei[0].getStudiengang()[m].getListAufgaben()[0].getT().Count;
-                    Console.WriteLine(zeigen);
                     switch (uebungsart[j])
                     {
                         case "P":

@@ -13,22 +13,31 @@ namespace Latex_Studienarbeit
         public static void Read()
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgaben exportieren(2) oder eine neue Aufgabe hinzufuegen (3)?", ConsoleColor.DarkBlue);
-                int auswahl = Convert.ToInt32(Console.ReadLine());
-                if (auswahl == 1)
-                {
-                    ChangeEntry.UpdateTexEntry();
-                }
-                if (auswahl == 2)
-                {
-                    Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
-                    int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
-                    AskIfExist(m_dbConnection, uebungseinheit_number);
-                    Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgaben exportieren(2) oder eine neue Aufgabe hinzufuegen (3) oder alle Loesungen importieren(4)?", ConsoleColor.DarkBlue);
+            int auswahl = Convert.ToInt32(Console.ReadLine());
+            if (auswahl == 1)
+            {
+                ChangeEntry.UpdateTexEntry();
+            }
+            if (auswahl == 2)
+            {
+                Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
+                int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
+                AskIfExist(m_dbConnection, uebungseinheit_number);
+                Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
 
-                    int numberUserInput = Convert.ToInt32(Console.ReadLine());
-                    ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
-                }
+                int numberUserInput = Convert.ToInt32(Console.ReadLine());
+                ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+            }
+            if (auswahl == 4)
+            {
+                Functions.ConsoleWrite("Bitte laden Sie alle Loesungen in den Ordner Loesungen und tippen sie anschliessend weiter", ConsoleColor.DarkBlue);
+                string weiter = Console.ReadLine();
+                weiter = weiter.ToUpper();
+                if(weiter.Equals("WEITER"))
+                GetLoesungen.SendLoesungenToDB();
+                Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+            }
             m_dbConnection.Close();
         }
 

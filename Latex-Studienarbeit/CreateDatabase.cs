@@ -9,41 +9,29 @@ namespace Latex_Studienarbeit
 {
     class CreateDatabase
     {
-        private static List<string> fileName = new List<string>();
+        private static List<string> nameOfFiles = new List<string>();
         private static List<string> uebungen_db = new List<string>();
 
-        /** get all MKB Files in Folder MKB-1*/
-        public static void GetAllFiles()
-        {
-            DirectoryInfo d = new DirectoryInfo(@"..\..\..\..\MKB-1\");//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles("*.tex"); //Getting Text files
-            foreach (FileInfo file in Files)
-            {
-                fileName.Add(file.Name);
-            }
-            //sortList();
-            fileName.Sort();
-        }
-        public static void sortList()
-        {
-            string[] array = new string[] { "p", "h", "t" };
-             List<string> uebungen = new List<string>();
-            for(int i = 0; i<2; i++)
-            {
-                string ii = i.ToString();
-                for (int j = 0; j < fileName.Count; j++)
-                {
-                    if (fileName[j].Contains(ii))
-                    {
-                        Console.WriteLine(fileName[j]);
-                    }
-                }
-            }
-        }
+        //public static void sortList()
+        //{
+        //    string[] array = new string[] { "p", "h", "t" };
+        //    List<string> uebungen = new List<string>();
+        //    for (int i = 0; i < 2; i++)
+        //    {
+        //        string ii = i.ToString();
+        //        for (int j = 0; j < fileName.Count; j++)
+        //        {
+        //            if (fileName[j].Contains(ii))
+        //            {
+        //                Console.WriteLine(fileName[j]);
+        //            }
+        //        }
+        //    }
+        //}
         /** create Table MKB */
         public static void CreateDatabaseSQLite()
         {
-            GetAllFiles();
+            nameOfFiles = Functions.GetAllFiles(new DirectoryInfo(@"..\..\..\..\MKB-1\"));
             SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
             string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
             Functions.sqlStatement(sql);
@@ -56,19 +44,19 @@ namespace Latex_Studienarbeit
             int pnumber = 1;
             int hnumber = 1;
             int tnumber = 1;
-            for (int m = 0; m < fileName.Count; m++)
+            for (int m = 0; m < nameOfFiles.Count; m++)
             {
-                string uebungsart = fileName[m].Substring(1, 1);
+                string uebungsart = nameOfFiles[m].Substring(1, 1);
                 uebungsart = uebungsart.ToUpper();
-                char getNumber = fileName[m][fileName[m].Length - 5];
+                char getNumber = nameOfFiles[m][nameOfFiles[m].Length - 5];
                 string uebungseinheit = "";
                 string line = "";
-                string filename = @"..\..\..\..\MKB-1\" + fileName[m];
+                string filename = @"..\..\..\..\MKB-1\" + nameOfFiles[m];
                 System.IO.StreamReader file =
                     new System.IO.StreamReader(filename);
                 while ((line = file.ReadLine()) != null)
                 {
-                    uebungseinheit += "\n" + line;
+                    uebungseinheit += line +"\n";
                 }
                 //AufgabenMitLoesung beinhaltet eine U-Aufgabe mit der zugehoerigen Loesung
                 string[] aufgabenMitLoesungen = uebungseinheit.Split(new string[] { "SPLITAufgabe" }, StringSplitOptions.RemoveEmptyEntries);

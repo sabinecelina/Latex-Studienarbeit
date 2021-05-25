@@ -25,9 +25,12 @@ namespace Latex_Studienarbeit
         }
         public static string ExportLoesungen(SQLiteDataReader reader)
         {
-            string loesung = "";
-            loesung = reader["Loesung"].ToString();
+            string loesunsgname = reader["NameDerAufgabe"].ToString();
+            string loesung = reader["Loesung"].ToString();
+            string id = reader["ID"].ToString();
             loesung = Functions.ReplaceStringToText(loesung);
+            loesunsgname = Functions.ReplaceStringToText(loesunsgname);
+            loesung = "%ID: " + id + " -- Loesungen zu: " + loesunsgname  + "\n" + loesung;
             if (loesung.Equals("NULL"))
             {
                 loesung = "%zu dieser Aufgabe existiert noch keine Loesung";
@@ -89,7 +92,7 @@ namespace Latex_Studienarbeit
         public static void ExportLoesungenTex(SQLiteConnection m_dbConnection, int number)
         {
             string sql;
-            sql = "select Loesung from MKB";
+            sql = "select ID, Loesung, NameDerAufgabe from MKB where Uebungsnummer='"+number+"'";
             CreatePath(sql, m_dbConnection, "loesungen-" + number + ".tex", 3);
             Console.WriteLine("Es wurde eine neue loesung.tex Datei erstellt");
         }
@@ -146,8 +149,8 @@ namespace Latex_Studienarbeit
                         break;
                     case 3:
                         loesung = ExportData.ExportLoesungen(reader);
-                        loesung = loesung + "%NameDerAufgabe \n";
                         aufgaben.Add(loesung);
+                        aufgaben.Add("\n");
                         break;
                 }
             }

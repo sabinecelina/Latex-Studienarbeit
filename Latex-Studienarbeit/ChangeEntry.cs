@@ -67,8 +67,7 @@ namespace Latex_Studienarbeit
             while (reader.Read())
             {
                 string aufgabename = ExportData.ExportNameDerAufgabe(reader);
-                aufgabename = aufgabename.Replace("slash", @"\").Replace("anfuerungszeichen", "\"")
-                .Replace("replacedonesign", "\'").Replace("dollar", @"$");
+                aufgabename = Functions.ReplaceStringToText(aufgabename);
                 aufgaben.Add(aufgabename);
                 string aufgabennummer = ExportData.ExportUebungsnummer(reader);
                 aufgabennummern.Add(aufgabennummer);
