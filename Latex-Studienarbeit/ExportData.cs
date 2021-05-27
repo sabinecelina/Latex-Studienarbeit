@@ -109,6 +109,12 @@ namespace Latex_Studienarbeit
             nummer = reader["Uebungsnummer"].ToString();
             return nummer;
         }
+        public static string ExportID(SQLiteDataReader reader)
+        {
+            string id = "";
+            id = reader["ID"].ToString();
+            return id;
+        }
         public static string ReturnUebungsart(string uebungsart)
         {
             switch (uebungsart)

@@ -12,9 +12,11 @@ namespace Latex_Studienarbeit
         private int aufgabennummer;
         private string aufgabe;
         private string loesungen;
-        public Uebungen(string name, int aufgabennummer) {
+        private string id;
+        public Uebungen(string name, int aufgabennummer, string id) {
             this.name = name;
             this.aufgabennummer = aufgabennummer;
+            this.id = id;
         }
         public string getName()
         {
@@ -23,6 +25,10 @@ namespace Latex_Studienarbeit
         public int getAufgabennummer()
         {
             return this.aufgabennummer;
+        }
+        public string GetId()
+        {
+            return this.id;
         }
         public void setName(string name)
         {

@@ -13,30 +13,48 @@ namespace Latex_Studienarbeit
         public static void Read()
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgaben exportieren(2) oder eine neue Aufgabe hinzufuegen (3) oder alle Loesungen importieren(4)?", ConsoleColor.DarkBlue);
-            int auswahl = Convert.ToInt32(Console.ReadLine());
-            if (auswahl == 1)
+            while (true)
             {
-                ChangeEntry.UpdateTexEntry();
-            }
-            if (auswahl == 2)
-            {
-                Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
-                int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
-                AskIfExist(m_dbConnection, uebungseinheit_number);
-                Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
+                Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgabenreihenfolgen aendern oder verschieben (2),Aufgaben exportieren(3) oder eine neue Aufgabe hinzufuegen (4) oder alle Loesungen importieren(5)?", ConsoleColor.DarkBlue);
+                try
+                {
+                    int auswahl = Convert.ToInt32(Console.ReadLine());
+                    if (auswahl == 1)
+                    {
+                        ChangeEntry.UpdateTexEntry();
+                    }
+                    if (auswahl == 2)
+                    {
+                        ChangeEntry.ChangeOrderinDatabase();
+                    }
+                    if (auswahl == 3)
+                    {
+                        Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
+                        int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
+                        AskIfExist(m_dbConnection, uebungseinheit_number);
+                        Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
 
-                int numberUserInput = Convert.ToInt32(Console.ReadLine());
-                ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
-            }
-            if (auswahl == 4)
-            {
-                Functions.ConsoleWrite("Bitte laden Sie alle Loesungen in den Ordner Loesungen und tippen sie anschliessend weiter", ConsoleColor.DarkBlue);
-                string weiter = Console.ReadLine();
-                weiter = weiter.ToUpper();
-                if(weiter.Equals("WEITER"))
-                GetLoesungen.SendLoesungenToDB();
-                Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+                        int numberUserInput = Convert.ToInt32(Console.ReadLine());
+                        ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+                    }
+                    if (auswahl == 5)
+                    {
+                        Functions.ConsoleWrite("Bitte laden Sie alle Loesungen in den Ordner Loesungen und tippen sie anschliessend weiter", ConsoleColor.DarkBlue);
+                        string weiter = Console.ReadLine();
+                        weiter = weiter.ToUpper();
+                        if (weiter.Equals("WEITER"))
+                            GetLoesungen.SendLoesungenToDB();
+                        Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+                    }
+                    if (auswahl > 5)
+                        throw new Exception();
+                }
+                catch (Exception e)
+                {
+                    Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkYellow);
+                    continue;
+                }
+                break;
             }
             m_dbConnection.Close();
         }
@@ -51,7 +69,7 @@ namespace Latex_Studienarbeit
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 if (count == 0)
                 {
-                    Functions.ConsoleWrite("Bitte beachten Sie: Es existieren keine " + uebungsart[i] + " Uebungen in der Uebungseinheit " + number + " \n", ConsoleColor.Red);
+                    Functions.ConsoleWrite("Warnung! Bitte beachten Sie: Es existieren keine " + uebungsart[i] + " Uebungen in der Uebungseinheit " + number + " \n", ConsoleColor.DarkYellow);
                 }
             }
 

@@ -26,7 +26,7 @@ namespace Latex_Studienarbeit
             sql = "select Uebungsaufgabe from MKB where Uebungseinheit='" + userInput[0] + "' AND Uebungsart='" + userInput[1] + "' AND Uebungsnummer='" + userInput[2] + "'";
             string changeEntryPath = "uebungsaufgabe.tex";
             ExportData.CreatePath(sql, m_dbConnection, changeEntryPath, 1);
-            Console.WriteLine("Tippen Sie 'weiter' sobal Sie die Uebungsaufgabe geaendert haben.");
+            Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Uebungsaufgabe geaendert haben.");
             getUserInput = Console.ReadLine();
             if (getUserInput.Equals("weiter"))
             {
@@ -39,7 +39,7 @@ namespace Latex_Studienarbeit
                 {
                     uebungsaufgabe += "\n" + line;
                 }
-                uebungsaufgabe = uebungsaufgabe.Replace("slash", @"\").Replace("anfuerungszeichen", "\"").Replace("replacedonesign", "\'").Replace("dollar", @"$");
+                uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
                 sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where Uebungseinheit='" + userInput[0] + "' AND Uebungsart='" + userInput[1] + "' AND Uebungsnummer='" + userInput[2] + "' ";
                 SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
                 command.ExecuteNonQuery();
@@ -49,57 +49,44 @@ namespace Latex_Studienarbeit
         public static void ChangeOrderinDatabase()
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite("In welcher Uebungseinheit und Uebungsart moechten Sie die Reihenfolge aendern 1,P?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("In welcher Uebungseinheit moechten Sie die Reihenfolge aendern 1?", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInputArray = getUserInput.Split(",");
-            while (userInputArray.Length != 2)
-            {
-                Functions.ConsoleWrite("Das Eingabeformat war leider falsch, bitte versuchen Sie es erneut.", ConsoleColor.DarkRed);
-                getUserInput = Console.ReadLine();
-                userInputArray = getUserInput.Split(",");
-            }
             Functions.ConsoleWrite("Sie haben folgende Uebungen, deren Reihenfolge Sie aendern koennen.", ConsoleColor.DarkBlue);
-            string sql = "select NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit='" + userInputArray[0] + "' and Uebungsart='" + userInputArray[1] + "'";
+            string sql = "select ID, NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit='" + getUserInput + "'";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
-            var aufgaben = new List<string>();
-            var aufgabennummern = new List<string>();
+            List<Uebungen> uebungen = new List<Uebungen>();
             while (reader.Read())
             {
                 string aufgabename = ExportData.ExportNameDerAufgabe(reader);
                 aufgabename = Functions.ReplaceStringToText(aufgabename);
-                aufgaben.Add(aufgabename);
-                string aufgabennummer = ExportData.ExportUebungsnummer(reader);
-                aufgabennummern.Add(aufgabennummer);
-            }
-            for (int i = 0; i < aufgaben.Count; i++)
-            {
-                Functions.ConsoleWrite("\n" + aufgabennummern[i] + " || " + aufgaben[i], ConsoleColor.DarkRed);
-            }
-            List<Uebungen> uebungen = new List<Uebungen>();
-            for (int j = 0; j < aufgaben.Count; j++)
-            {
-                Uebungen uebung = new Uebungen(aufgaben[j], Int32.Parse(aufgabennummern[j]));
+                int aufgabennummer = Int32.Parse(ExportData.ExportUebungsnummer(reader));
+                string id = ExportData.ExportID(reader);
+                Uebungen uebung = new Uebungen(aufgabename, aufgabennummer, id);
                 uebungen.Add(uebung);
             }
-            Functions.ConsoleWrite("Welche Aufgaben moechten sie tauschen? [1,2]", ConsoleColor.DarkBlue);
-            getUserInput = Console.ReadLine();
-            userInputArray = getUserInput.Split(",");
             for (int i = 0; i < uebungen.Count; i++)
             {
-                Uebungen uebung;
-                int numberTwo = Int32.Parse(userInputArray[1]);
-                if (numberTwo.Equals(uebungen[i].getAufgabennummer()))
+                Functions.ConsoleWrite("\n" + uebungen[i].getName() + " || " + uebungen[i].getAufgabennummer() + " || ID: " + uebungen[i].GetId(), ConsoleColor.DarkRed);
+            }
+            Functions.ConsoleWrite("Welche Aufgaben moechten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
+            getUserInput = Console.ReadLine();
+            userInputArray = getUserInput.Split(",");
+            for (int i = 0; i < userInputArray.Length; i++)
+            {
+                foreach (Uebungen uebungsaufgaben in uebungen)
                 {
-                    uebung = uebungen[i];
-                    Console.WriteLine(uebung.getName());
-                    sql = "update MKB set Uebungsnummer=" + userInputArray[0] + " where NameDerAufgabe='" + uebung.getName() + "' ";
+                    int uebungsnummer = 0;
+                    if (uebungsaufgaben.GetId().Equals(userInputArray[i]))
+                    {
+                         uebungsnummer = uebungsaufgaben.getAufgabennummer();
+                    }
+                    sql = "update MKB set Uebungsnummer=" + userInputArray[i] + " where ID='" + uebungsnummer + "' ";
                     Console.WriteLine(sql);
-                    command = new SQLiteCommand(sql, m_dbConnection);
-                    command.ExecuteNonQuery();
+                    Functions.sqlStatement(sql);
                 }
             }
-            m_dbConnection.Close();
         }
     }
 }
