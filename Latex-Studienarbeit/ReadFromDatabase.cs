@@ -76,17 +76,31 @@ namespace Latex_Studienarbeit
         }
         public static void ExportFiles(SQLiteConnection m_dbConnection, int number, int auswahl)
         {
-            if (number == 1)
+            if (number == 1 || number == 2)
             {
-                Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
-                string userInput = Console.ReadLine();
-                ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
-            }
-            else if (number == 2)
-            {
-                Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
-                string userInput2 = Console.ReadLine();
-                ExportData.ExportUebungen(userInput2, m_dbConnection, auswahl, number);
+                while (true)
+                {
+                    try
+                    {
+                        Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
+                        string userInput = Console.ReadLine();
+                        string[] input = userInput.Split(",");
+                        if (input.Length == 1)
+                        {
+                            throw new Exception();
+                        }
+                        else
+                        {
+                            ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. Bitte versuchen Sie es erneut./n ", ConsoleColor.DarkYellow);
+                        continue;
+                    }
+                    break;
+                }
             }
             else if (number == 3)
             {

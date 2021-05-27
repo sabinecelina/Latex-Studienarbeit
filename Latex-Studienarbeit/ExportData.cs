@@ -70,9 +70,11 @@ namespace Latex_Studienarbeit
             {
                 uebungsart = ReturnUebungsart(input[0]);
                 sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[0] + "' AND Uebungseinheit='" + number + "'";
+                Console.WriteLine(sql);
                 CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
                 uebungsart = ReturnUebungsart(input[1]);
                 sql = "select " + moeglichkeit + " from MKB where Uebungsart='" + input[1] +"' AND Uebungseinheit='" + number + "'";
+                Console.WriteLine(sql);
                 CreatePath(sql, m_dbConnection, uebungsart, caseNumber);
             }
             else if(input.Length == 3)
