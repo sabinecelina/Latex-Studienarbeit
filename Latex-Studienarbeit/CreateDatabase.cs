@@ -10,8 +10,6 @@ namespace Latex_Studienarbeit
     class CreateDatabase
     {
         private static List<string> nameOfFiles = new List<string>();
-        private static List<string> uebungen_db = new List<string>();
-
         //public static void sortList()
         //{
         //    string[] array = new string[] { "p", "h", "t" };

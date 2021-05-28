@@ -9,7 +9,6 @@ namespace Latex_Studienarbeit
         {
            //CreateAndInsertIntoDatabase();
            ReadFromDatabase.Read();
-           //ChangeEntry.ChangeOrderinDatabase();
         }
         public static void CreateAndInsertIntoDatabase()
         {
