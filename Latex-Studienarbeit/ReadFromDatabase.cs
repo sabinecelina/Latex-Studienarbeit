@@ -22,10 +22,12 @@ namespace Latex_Studienarbeit
                     if (auswahl == 1)
                     {
                         ChangeEntry.UpdateTexEntry();
+                        break;
                     }
                     if (auswahl == 2)
                     {
                         ChangeEntry.ChangeOrderinDatabase();
+                        break;
                     }
                     if (auswahl == 3)
                     {
@@ -36,6 +38,7 @@ namespace Latex_Studienarbeit
 
                         int numberUserInput = Convert.ToInt32(Console.ReadLine());
                         ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+                        break;
                     }
                     if (auswahl == 5)
                     {
@@ -45,6 +48,7 @@ namespace Latex_Studienarbeit
                         if (weiter.Equals("WEITER"))
                             GetLoesungen.SendLoesungenToDB();
                         Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+                        break;
                     }
                     if (auswahl > 5)
                         throw new Exception();
