@@ -47,13 +47,13 @@ namespace Latex_Studienarbeit
             Console.WriteLine(text);
             Console.ResetColor();
         }
-        public static void AllUebungenFromNumner()
+        public static void AllUebungenFromNumner(string writeLine)
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite("In welchen Übungseinheiten möchten Sie die Reihenfolge ändern?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite(writeLine, ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] allInput = getUserInput.Split(',');
-            Functions.ConsoleWrite("Sie haben folgende Uebungen zur Auswahl: \n", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Sie haben folgende Übungen zur Auswahl: \n", ConsoleColor.DarkBlue);
             for(int i = 0; i< allInput.Length; i++) {
                 int uebungseinheit = Int32.Parse(allInput[i]);
                 string sql = "select ID, NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit=" + allInput[i] + "";
@@ -73,8 +73,8 @@ namespace Latex_Studienarbeit
                 for (int j = 0; j < uebungen.Count; j++)
                 {
                     Functions.ConsoleWrite(uebungen[j].GetName() + " || " + uebungen[j].GetAufgabennummer() + " || ID: " + uebungen[j].GetId(), ConsoleColor.DarkRed);
-                    Console.WriteLine("\n");
                 }
+                Console.WriteLine("\n");
             }
            
             m_dbConnection.Close();

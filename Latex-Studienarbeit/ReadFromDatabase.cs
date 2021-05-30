@@ -5,64 +5,73 @@ using System.Data.SQLite;
 using System.Collections.Generic;
 namespace Latex_Studienarbeit
 {
-    class ReadFromDatabase
+    class MainSelection
 
     {
         private static string[] uebungsart = new string[] { "P", "H", "T" };
         private static SQLiteConnection m_dbConnection = new(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void Read()
         {
-            m_dbConnection.Open();
-            while (true)
+            Functions.ConsoleWrite("Möchten Sie eine Aufgabe bearbeiten (1), Aufgabenreihenfolgen ändern oder verschieben (2), Aufgaben exportieren (3), eine neue Aufgabe hinzufügen (4) oder alle Lösungen importieren (5)?", ConsoleColor.DarkBlue);
+            try
             {
-                Functions.ConsoleWrite("Moechten Sie eine Aufgabe bearbeiten(1), Aufgabenreihenfolgen aendern oder verschieben (2),Aufgaben exportieren(3) oder eine neue Aufgabe hinzufuegen (4) oder alle Loesungen importieren(5)?", ConsoleColor.DarkBlue);
-                try
+                int auswahl = Convert.ToInt32(Console.ReadLine());
+                if (auswahl == 1)
                 {
-                    int auswahl = Convert.ToInt32(Console.ReadLine());
-                    if (auswahl == 1)
-                    {
-                        ChangeEntry.UpdateTexEntry();
-                        break;
-                    }
-                    if (auswahl == 2)
-                    {
-                        ChangeEntry.ChangeOrderinDatabase();
-                        break;
-                    }
-                    if (auswahl == 3)
-                    {
-                        Functions.ConsoleWrite("Welche Uebungseinheit in Nummer moechten Sie exportieren?", ConsoleColor.DarkBlue);
-                        int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
-                        AskIfExist(m_dbConnection, uebungseinheit_number);
-                        Functions.ConsoleWrite("Moechten Sie die Uebungseinheiten mit Loesungen(1) exportieren oder nur die Uebungsaufgaben(2) oder nur die Loesungen(3)?", ConsoleColor.DarkBlue);
+                    m_dbConnection.Open();
+                    ChangeEntry.UpdateTexEntry();
+                    m_dbConnection.Close();
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
+                    string getUserInput = Console.ReadLine().ToUpper();
+                    if (getUserInput.Equals("J"))
+                        Read();
+                }
+                if (auswahl == 2)
+                {
+                    m_dbConnection.Open();
+                    ChangeEntry.ChangeOrderinDatabase();
+                    m_dbConnection.Close();
+                    Functions.ConsoleWrite("Sie haben erfolgreich zwei Übungen miteinander vertauscht", ConsoleColor.DarkGreen);
+                    string getUserInput = Console.ReadLine().ToUpper();
+                    if (getUserInput.Equals("J"))
+                        Read();
+                }
+                if (auswahl == 3)
+                {
+                    m_dbConnection.Open();
+                    Functions.ConsoleWrite("Welche Übungseinheit in Nummer möchten Sie exportieren?", ConsoleColor.DarkBlue);
+                    int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
+                    AskIfExist(m_dbConnection, uebungseinheit_number);
+                    Functions.ConsoleWrite("Moechten Sie die Übungseinheiten mit Lösungen(1) exportieren oder nur die Übungsaufgaben(2) oder nur die Lösungen(3)?", ConsoleColor.DarkBlue);
 
-                        int numberUserInput = Convert.ToInt32(Console.ReadLine());
-                        ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
-                        break;
-                    }
-                    if (auswahl == 5)
-                    {
-                        Functions.ConsoleWrite("Bitte laden Sie alle Loesungen in den Ordner Loesungen und tippen sie anschliessend weiter", ConsoleColor.DarkBlue);
-                        string weiter = Console.ReadLine();
-                        weiter = weiter.ToUpper();
-                        if (weiter.Equals("WEITER"))
-                            GetLoesungen.SendLoesungenToDB();
-                        Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
-                        break;
-                    }
-                    if (auswahl > 5)
-                        throw new Exception();
+                    int numberUserInput = Convert.ToInt32(Console.ReadLine());
+                    ExportFromDB.ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+                    m_dbConnection.Close();
+                    Functions.ConsoleWrite("Es wurden neue Dateien angelegt.", ConsoleColor.DarkGreen);
+                    string getUserInput = Console.ReadLine().ToUpper();
+                    if (getUserInput.Equals("J"))
+                        Read();
                 }
-                catch (Exception e)
+                if (auswahl == 5)
                 {
-                    Console.Write(e);
-                    Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkYellow);
-                    continue;
+                    Functions.ConsoleWrite("Bitte laden Sie alle Lösungen in den Ordner Loesungen und tippen sie anschließend weiter", ConsoleColor.DarkBlue);
+                    string weiter = Console.ReadLine();
+                    weiter = weiter.ToUpper();
+                    if (weiter.Equals("WEITER"))
+                        GetLoesungen.SendLoesungenToDB();
+                    Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
                 }
-                break;
+                if (auswahl > 5)
+                    throw new Exception();
             }
-            m_dbConnection.Close();
+            catch (Exception e)
+            {
+                Console.Write(e);
+                Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkYellow);
+                Read();
+            }
         }
+
 
         public static void AskIfExist(SQLiteConnection m_dbConnection, int number)
         {
@@ -79,38 +88,6 @@ namespace Latex_Studienarbeit
             }
 
         }
-        public static void ExportFiles(SQLiteConnection m_dbConnection, int number, int auswahl)
-        {
-            if (number == 1 || number == 2)
-            {
-                while (true)
-                {
-                    try
-                    {
-                        Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
-                        string userInput = Console.ReadLine();
-                        string[] input = userInput.Split(",");
-                        if (input.Length == 1)
-                        {
-                            throw new Exception();
-                        }
-                        else
-                        {
-                            ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. Bitte versuchen Sie es erneut./n ", ConsoleColor.DarkYellow);
-                        continue;
-                    }
-                    break;
-                }
-            }
-            else if (number == 3)
-            {
-                ExportFromDB.ExportLoesungenTex(m_dbConnection, auswahl);
-            }
-        }
+
     }
 }
