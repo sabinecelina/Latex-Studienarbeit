@@ -21,7 +21,6 @@ namespace Latex_Studienarbeit
                     int auswahl = Convert.ToInt32(Console.ReadLine());
                     if (auswahl == 1)
                     {
-                        Console.Write("Bullshit");
                         ChangeEntry.UpdateTexEntry();
                         break;
                     }

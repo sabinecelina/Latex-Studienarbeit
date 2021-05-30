@@ -8,6 +8,7 @@ namespace Latex_Studienarbeit
 {
     class Functions
     {
+        private static string[] uebungsart = new string[] { "P", "H", "T" };
         private static string connectionPath = @"Data Source=..\..\..\..\MKB.sqlite;Version=3;";
         private static SQLiteConnection m_dbConnection = new SQLiteConnection(connectionPath);
         public static List<string> GetAllFiles(DirectoryInfo d)
@@ -45,6 +46,38 @@ namespace Latex_Studienarbeit
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(text);
             Console.ResetColor();
+        }
+        public static void AllUebungenFromNumner()
+        {
+            m_dbConnection.Open();
+            Functions.ConsoleWrite("In welchen Übungseinheiten möchten Sie die Reihenfolge ändern?", ConsoleColor.DarkBlue);
+            string getUserInput = Console.ReadLine();
+            string[] allInput = getUserInput.Split(',');
+            Functions.ConsoleWrite("Sie haben folgende Uebungen zur Auswahl: ", ConsoleColor.DarkBlue);
+            for(int i = 0; i< allInput.Length; i++) {
+                int uebungseinheit = Int32.Parse(allInput[i]);
+                string sql = "select ID, NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit=" + allInput[i] + "";
+                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+                List<Uebungen> uebungen = new List<Uebungen>();
+                while (reader.Read())
+                {
+                    string aufgabename = ExportData.ExportNameDerAufgabe(reader);
+                    aufgabename = Functions.ReplaceStringToText(aufgabename);
+                    int aufgabennummer = Int32.Parse(ExportData.ExportUebungsnummer(reader));
+                    string id = ExportData.ExportID(reader);
+                    Uebungen uebung = new Uebungen(aufgabename, aufgabennummer, id);
+                    uebungen.Add(uebung);
+                }
+                for (int j = 0; j < uebungen.Count; j++)
+                {
+                    Console.WriteLine("\n");
+                    Functions.ConsoleWrite(uebungen[j].getName() + " || " + uebungen[j].getAufgabennummer() + " || ID: " + uebungen[j].GetId(), ConsoleColor.DarkRed);
+                    Console.WriteLine("\n");
+                }
+            }
+           
+            m_dbConnection.Close();
         }
     }
 }

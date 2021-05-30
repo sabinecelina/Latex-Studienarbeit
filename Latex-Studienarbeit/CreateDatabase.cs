@@ -70,7 +70,7 @@ namespace Latex_Studienarbeit
                     aufgabe[i] = aufgabenUndLoesungGetrennt[0];
                     if (aufgabenUndLoesungGetrennt.Length == 1)
                     {
-                        loesung[i] = "NULL";
+                        loesung[i] = "%zu dieser Aufgabe existiert noch keine Loesung";
                     }
                     else
                     {

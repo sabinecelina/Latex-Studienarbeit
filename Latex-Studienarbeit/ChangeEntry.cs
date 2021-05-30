@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
 
 namespace Latex_Studienarbeit
@@ -12,31 +8,28 @@ namespace Latex_Studienarbeit
         public static SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void UpdateTexEntry()
         {
-            Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie wie folgt ein: 1,P,8", ConsoleColor.DarkBlue);
-            string getUserInput = Console.ReadLine();
-            string[] userInput = getUserInput.Split(',');
-            Console.WriteLine(userInput[0] + userInput[1] + userInput[2]);
             m_dbConnection.Open();
-            string sql;
-            sql = "select Uebungsaufgabe from MKB where Uebungseinheit='" + userInput[0] + "' AND Uebungsart='" + userInput[1] + "' AND Uebungsnummer='" + userInput[2] + "'";
-            Console.WriteLine(sql);
-            string changeEntryPath = "uebungsaufgabe.tex";
-            ExportData.CreatePath(sql, m_dbConnection, changeEntryPath, 2);
-            Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Uebungsaufgabe geaendert haben.");
+            Functions.AllUebungenFromNumner();
+            Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie die ID ein: ", ConsoleColor.DarkBlue);
+            string getUserInput = Console.ReadLine();
+            int uebungseinheit = Int32.Parse(getUserInput);
+            string sql = "select Uebungsaufgabe from MKB where ID="+ uebungseinheit + "";
+            string entryPath = "uebungsaufgabe.tex";
+            ExportData.CreatePath(sql, m_dbConnection, entryPath, 2);
+            Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
             getUserInput = Console.ReadLine();
             if (getUserInput.Equals("weiter"))
             {
-                string filename = @"..\..\..\..\" + changeEntryPath;
                 string line = "";
                 string uebungsaufgabe = "";
                 System.IO.StreamReader file =
-                    new System.IO.StreamReader(filename);
+                    new System.IO.StreamReader(@"..\..\..\..\" + entryPath);
                 while ((line = file.ReadLine()) != null)
                 {
                     uebungsaufgabe += "\n" + line;
                 }
                 uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
-                sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where Uebungseinheit='" + userInput[0] + "' AND Uebungsart='" + userInput[1] + "' AND Uebungsnummer='" + userInput[2] + "' ";
+                sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID='" + getUserInput + "'";
                 SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
                 command.ExecuteNonQuery();
             }
@@ -45,44 +38,16 @@ namespace Latex_Studienarbeit
         public static void ChangeOrderinDatabase()
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite("In welcher Uebungseinheit moechten Sie die Reihenfolge aendern 1?", ConsoleColor.DarkBlue);
+            Functions.AllUebungenFromNumner();
+            Functions.ConsoleWrite("Welche Aufgaben mächten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInputArray = getUserInput.Split(",");
-            Functions.ConsoleWrite("Sie haben folgende Uebungen, deren Reihenfolge Sie aendern koennen.", ConsoleColor.DarkBlue);
-            string sql = "select ID, NameDerAufgabe, Uebungsnummer from MKB where Uebungseinheit='" + getUserInput + "'";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            List<Uebungen> uebungen = new List<Uebungen>();
-            while (reader.Read())
-            {
-                string aufgabename = ExportData.ExportNameDerAufgabe(reader);
-                aufgabename = Functions.ReplaceStringToText(aufgabename);
-                int aufgabennummer = Int32.Parse(ExportData.ExportUebungsnummer(reader));
-                string id = ExportData.ExportID(reader);
-                Uebungen uebung = new Uebungen(aufgabename, aufgabennummer, id);
-                uebungen.Add(uebung);
-            }
-            for (int i = 0; i < uebungen.Count; i++)
-            {
-                Functions.ConsoleWrite("\n" + uebungen[i].getName() + " || " + uebungen[i].getAufgabennummer() + " || ID: " + uebungen[i].GetId(), ConsoleColor.DarkRed);
-            }
-            Functions.ConsoleWrite("Welche Aufgaben moechten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
-            getUserInput = Console.ReadLine();
-            userInputArray = getUserInput.Split(",");
-            for (int i = 0; i < userInputArray.Length; i++)
-            {
-                foreach (Uebungen uebungsaufgaben in uebungen)
-                {
-                    int uebungsnummer = 0;
-                    if (uebungsaufgaben.GetId().Equals(userInputArray[i]))
-                    {
-                         uebungsnummer = uebungsaufgaben.getAufgabennummer();
-                    }
-                    sql = "update MKB set Uebungsnummer=" + userInputArray[i] + " where ID='" + uebungsnummer + "' ";
-                    Console.WriteLine(sql);
-                    Functions.sqlStatement(sql);
-                }
-            }
+            string sql = "select Uebungsart MKB set Uebungsnummer=" + userInputArray[1] + " where ID='" + userInputArray[0] + "' ";
+             sql = "update MKB set Uebungsnummer=" + userInputArray[1] + " where ID='" + userInputArray[0] + "' ";
+            Functions.sqlStatement(sql);
+            sql = "update MKB set Uebungsnummer=" + userInputArray[0] + " where ID='" + userInputArray[1] + "' ";
+            Functions.sqlStatement(sql);
+            m_dbConnection.Close();
         }
     }
 }

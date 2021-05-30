@@ -14,8 +14,9 @@ namespace Latex_Studienarbeit
         {
             CreateDatabase.CreateDatabaseSQLite();
             CreateDatabase.InsertIntoDatabase();
-            //ReadJson.readJson();
-            //ReadJson.ChangeDatabaseEntry();
+            ReadJson.readJson();
+            ReadJson.ChangeDatabaseEntry();
+            Functions.ConsoleWrite("Die Datenbank wurde erfolgreich erstellt.", ConsoleColor.DarkGreen);
         }
     }
 }
