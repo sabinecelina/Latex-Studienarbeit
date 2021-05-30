@@ -9,7 +9,7 @@ namespace Latex_Studienarbeit
 
     {
         private static string[] uebungsart = new string[] { "P", "H", "T" };
-        private static SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
+        private static SQLiteConnection m_dbConnection = new(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void Read()
         {
             m_dbConnection.Open();
@@ -69,7 +69,7 @@ namespace Latex_Studienarbeit
             for (int i = 0; i < uebungsart.Length; i++)
             {
                 string sql = "select exists(select Uebungsaufgabe from MKB where Uebungsart='" + uebungsart[i] + "' AND Uebungseinheit=" + number + ")";
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                SQLiteCommand command = new(sql, m_dbConnection);
                 command.ExecuteNonQuery();
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 if (count == 0)
@@ -109,7 +109,7 @@ namespace Latex_Studienarbeit
             }
             else if (number == 3)
             {
-                ExportData.ExportLoesungenTex(m_dbConnection, auswahl);
+                ExportFromDB.ExportLoesungenTex(m_dbConnection, auswahl);
             }
         }
     }

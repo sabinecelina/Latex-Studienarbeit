@@ -54,10 +54,10 @@ namespace Latex_Studienarbeit
                     }
                     foreach (Uebungen uebung in uebungen)
                     {
-                        string nameDerAufgabe = uebung.getName();
+                        string nameDerAufgabe = uebung.GetName();
                         nameDerAufgabe = Functions.ReplaceStringToDB(nameDerAufgabe);
                         int uebungseinheit = mathematikZwei[0].getStudiengang()[m].getUebungseinheit();
-                        int aufgabennummer = uebung.getAufgabennummer();
+                        int aufgabennummer = uebung.GetAufgabennummer();
                         string sql = ("update MKB set NameDerAufgabe='" + nameDerAufgabe + "' where Uebungseinheit=" + uebungseinheit + " AND Uebungsart='" + uebungsart[j] + "' AND Uebungsnummer=" + aufgabennummer + "");
                         Functions.sqlStatement(sql);
                     }

@@ -13,7 +13,7 @@ namespace Latex_Studienarbeit
             Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie die ID ein: ", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             int uebungseinheit = Int32.Parse(getUserInput);
-            string sql = "select Uebungsaufgabe from MKB where ID="+ uebungseinheit + "";
+            string sql = "select Uebungsaufgabe from MKB where ID=" + uebungseinheit + "";
             string entryPath = "uebungsaufgabe.tex";
             ExportData.CreatePath(sql, m_dbConnection, entryPath, 2);
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
@@ -37,15 +37,27 @@ namespace Latex_Studienarbeit
         }
         public static void ChangeOrderinDatabase()
         {
-            m_dbConnection.Open();
             Functions.AllUebungenFromNumner();
-            Functions.ConsoleWrite("Welche Aufgaben mächten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgaben möchten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
-            string[] userInputArray = getUserInput.Split(",");
-            string sql = "select Uebungsart MKB set Uebungsnummer=" + userInputArray[1] + " where ID='" + userInputArray[0] + "' ";
-             sql = "update MKB set Uebungsnummer=" + userInputArray[1] + " where ID='" + userInputArray[0] + "' ";
-            Functions.sqlStatement(sql);
-            sql = "update MKB set Uebungsnummer=" + userInputArray[0] + " where ID='" + userInputArray[1] + "' ";
+            string[] userInputArray = getUserInput.Split(',');
+            UpdateDB(userInputArray[0], userInputArray[1]);
+            UpdateDB(userInputArray[1], userInputArray[0]);
+        }
+        public static void UpdateDB(string userInput, string user)
+        {
+            m_dbConnection.Open();
+            int id = Int32.Parse(userInput);
+            string sql = "select * from MKB where ID=" + id + "";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            string aufgabe = "";
+            Uebungen uebung = new Uebungen();
+            while (reader.Read())
+            {
+                uebung = ExportFromDB.ExportAll(reader);
+            }
+            sql = "update MKB set NamederAufgabe='" + Functions.ReplaceStringToDB(uebung.GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebung.GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebung.GetLoesung()) + "'  where ID='" + user + "' ";
             Functions.sqlStatement(sql);
             m_dbConnection.Close();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,24 +12,72 @@ namespace Latex_Studienarbeit
         private string name;
         private int aufgabennummer;
         private string aufgabe;
-        private string loesungen;
-        private string id;
-        public Uebungen(string name, int aufgabennummer, string id) {
+        private string loesung;
+        private int id;
+        private string uebungseinheit;
+        public Uebungen()
+        {
+        }
+
+        [JsonConstructor]
+        public Uebungen(string name, int aufgabennummer)
+        {
+            this.name = name;
+            this.aufgabennummer = aufgabennummer;
+        }
+        public Uebungen(string name, int aufgabennummer, int id) {
             this.name = name;
             this.aufgabennummer = aufgabennummer;
             this.id = id;
         }
-        public string getName()
+        public Uebungen(string uebungseinheit, string aufgabe, string loesung, string name, int aufgabennummer, int id)
+        {
+            this.aufgabe = aufgabe;
+            this.loesung = loesung;
+            this.name = name;
+            this.aufgabennummer = aufgabennummer;
+            this.id = id;
+            this.uebungseinheit = uebungseinheit;
+        }
+        public string GetAufgabe()
+        {
+            return this.aufgabe;
+        }
+        public string GetLoesung()
+        {
+            return this.loesung;
+        }
+        public string GetName()
         {
             return this.name;
         }
-        public int getAufgabennummer()
+        public int GetAufgabennummer()
         {
             return this.aufgabennummer;
         }
-        public string GetId()
+        public int GetId()
         {
             return this.id;
+        }
+        public void SetAufgabe(string aufgabe)
+        {
+             this.aufgabe = aufgabe;
+        }
+        public void SetLoesung(string loesung)
+        {
+             this.loesung = loesung;
+        }
+        public void SetName(string name)
+        {
+            this.name = name;
+        }
+        public void SetAufgabennummer(int aufgabennummer)
+        {
+            this.aufgabennummer = aufgabennummer;
+        }
+        public void SetId(int id)
+        {
+            this.id = id;
         }
     }
 }

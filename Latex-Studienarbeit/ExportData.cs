@@ -9,33 +9,11 @@ namespace Latex_Studienarbeit
     class ExportData
     {
         private static string[] uebungen = new string[] { "preasuebg-", "hausuebg-", "tutorium-" };
-        private static string[] uebungsart = new string[] { "P", "H", "T" };
         public static void SetUebungseinheitNumber(int number)
         {
             uebungen[0] = uebungen[0] + number + ".tex";
             uebungen[1] = uebungen[1] + number + ".tex";
             uebungen[2] = uebungen[2] + number + ".tex";
-        }
-        public static string ExportAufgaben(SQLiteDataReader reader)
-        {
-            string aufgabe = "";
-            aufgabe = reader["Uebungsaufgabe"].ToString();
-            aufgabe = Functions.ReplaceStringToText(aufgabe);
-            return aufgabe;
-        }
-        public static string ExportLoesungen(SQLiteDataReader reader)
-        {
-            string loesunsgname = reader["NameDerAufgabe"].ToString();
-            string loesung = reader["Loesung"].ToString();
-            string id = reader["ID"].ToString();
-            loesung = Functions.ReplaceStringToText(loesung);
-            loesunsgname = Functions.ReplaceStringToText(loesunsgname);
-            loesung = "%ID: " + id + " -- Loesungen zu: " + loesunsgname  + "\n" + loesung;
-            if (loesung.Equals("NULL"))
-            {
-                loesung = "%zu dieser Aufgabe existiert noch keine Loesung";
-            }
-            return loesung;
         }
         public static void ExportUebungen(string userInput, SQLiteConnection m_dbConnection, int number, int auswahl)
         {
@@ -89,32 +67,7 @@ namespace Latex_Studienarbeit
                 Functions.ConsoleWrite("Die Eingabe war leider ungueltig.", ConsoleColor.DarkYellow);
             }
         }
-        public static void ExportLoesungenTex(SQLiteConnection m_dbConnection, int number)
-        {
-            string sql;
-            sql = "select ID, Loesung, NameDerAufgabe from MKB where Uebungsnummer='"+number+"'";
-            CreatePath(sql, m_dbConnection, "loesungen-" + number + ".tex", 3);
-            Console.WriteLine("Es wurde eine neue loesung.tex Datei erstellt");
-        }
-        public static string ExportNameDerAufgabe(SQLiteDataReader reader)
-        {
-            string aufgabe = "";
-            aufgabe = reader["NameDerAufgabe"].ToString();
-            aufgabe = Functions.ReplaceStringToText(aufgabe);
-            return aufgabe;
-        }
-        public static string ExportUebungsnummer(SQLiteDataReader reader)
-        {
-            string nummer = "";
-            nummer = reader["Uebungsnummer"].ToString();
-            return nummer;
-        }
-        public static string ExportID(SQLiteDataReader reader)
-        {
-            string id = "";
-            id = reader["ID"].ToString();
-            return id;
-        }
+       
         public static string ReturnUebungsart(string uebungsart)
         {
             switch (uebungsart)
@@ -145,16 +98,16 @@ namespace Latex_Studienarbeit
                 switch (exportArt)
                 {
                     case 1:
-                        aufgabe = ExportData.ExportAufgaben(reader);
-                        loesung = ExportData.ExportLoesungen(reader);
+                        aufgabe = ExportFromDB.ExportAufgaben(reader);
+                        loesung = ExportFromDB.ExportLoesungen(reader);
                         aufgaben.Add(aufgabe + loesung);
                         break;
                     case 2:
-                        aufgabe = ExportData.ExportAufgaben(reader);
+                        aufgabe = ExportFromDB.ExportAufgaben(reader);
                         aufgaben.Add(aufgabe);
                         break;
                     case 3:
-                        loesung = ExportData.ExportLoesungen(reader);
+                        loesung = ExportFromDB.ExportLoesungen(reader);
                         aufgaben.Add(loesung);
                         aufgaben.Add("\n");
                         break;
