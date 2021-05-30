@@ -12,20 +12,16 @@ namespace Latex_Studienarbeit
         public static SQLiteConnection m_dbConnection = new SQLiteConnection(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void UpdateTexEntry()
         {
-            Functions.ConsoleWrite("Welche Aufgabe moechten Sie aendern? Tippen Sie wie folgt ein: 1,P,8", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie wie folgt ein: 1,P,8", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
-            string[] userInput = getUserInput.Split(",");
-            while (userInput.Length != 3)
-            {
-                Functions.ConsoleWrite("Sie haben die Aufgabe nicht richtig eingeschrieben. Versuchen Sie es erneut: 1,P,8", ConsoleColor.DarkBlue);
-                getUserInput = Console.ReadLine();
-                userInput = getUserInput.Split(",");
-            }
+            string[] userInput = getUserInput.Split(',');
+            Console.WriteLine(userInput[0] + userInput[1] + userInput[2]);
             m_dbConnection.Open();
             string sql;
             sql = "select Uebungsaufgabe from MKB where Uebungseinheit='" + userInput[0] + "' AND Uebungsart='" + userInput[1] + "' AND Uebungsnummer='" + userInput[2] + "'";
+            Console.WriteLine(sql);
             string changeEntryPath = "uebungsaufgabe.tex";
-            ExportData.CreatePath(sql, m_dbConnection, changeEntryPath, 1);
+            ExportData.CreatePath(sql, m_dbConnection, changeEntryPath, 2);
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Uebungsaufgabe geaendert haben.");
             getUserInput = Console.ReadLine();
             if (getUserInput.Equals("weiter"))
