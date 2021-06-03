@@ -52,8 +52,9 @@ namespace Latex_Studienarbeit
                 int uebungsnummer = uebungen[i].GetAufgabennummer();
                 sql = "update MKB set NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungseinheit=" + uebungen[i].GetUebungseinheit() + ", Uebungsnummer=" + uebungsnummer + ",  Uebungsart='" + uebungen[i].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebungen[i].GetLoesung()) + "'  where ID=" + iduebungen + "";
                 Functions.sqlStatement(sql);
-                //sql = "update MKB set Uebungsnummer=" + uebungsnummer + " where ID=" + iduebungen + " AND Uebungsart='"+ uebungen[i].GetUebungsart() + "'";
-
+                uebungsnummer += 1;
+                sql = "update MKB set Uebungsnummer=" + uebungsnummer + " where ID=" + iduebungen + " AND Uebungsart='"+ uebungen[1].GetUebungsart() + "'";
+                Functions.sqlStatement(sql);
                 idnumber++;
             }
 
