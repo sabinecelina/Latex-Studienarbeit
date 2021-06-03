@@ -8,7 +8,7 @@ namespace Latex_Studienarbeit
 {
     class ExportData
     {
-        private static string[] uebungen = new string[] { "preasuebg-", "hausuebg-", "tutorium-" };
+        private static string[] uebungen = new string[] { "praesuebg-", "hausuebg-", "tutorium-" };
         public static void SetUebungseinheitNumber(int number)
         {
             uebungen[0] = uebungen[0] + number + ".tex";

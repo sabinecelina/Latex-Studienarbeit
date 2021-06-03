@@ -22,9 +22,13 @@ namespace Latex_Studienarbeit
             string sql = "SELECT COUNT(*) FROM MKB";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
-            int RowCount = 0;
-            RowCount = Convert.ToInt32(command.ExecuteScalar()) - Int32.Parse(getUserInput);
+            int RowCount = Convert.ToInt32(command.ExecuteScalar());
+            RowCount += 1;
+            int newId = RowCount;
+            sql = "insert into MKB (ID) values (" + RowCount + ")";
+            Functions.sqlStatement(sql);
             int id = Int32.Parse(getUserInput) + 1;
+            RowCount = RowCount - 1 - id;
             List<Uebungen> uebungen = new List<Uebungen>();
             Uebungen newUebung = new Uebungen("name", 2, id);
             uebungen.Add(newUebung);
@@ -39,22 +43,27 @@ namespace Latex_Studienarbeit
                     uebungen.Add(ExportFromDB.ExportAll(reader));
                 }
             }
-            sql = "insert into MKB (ID) values (0)";
-            Functions.sqlStatement(sql);
+            int idnumber = id;
             for (int i = 1; i < uebungen.Count; i++)
             {
-                int iduebungen = uebungen[i].GetId() + 1;
-                int uebungsnummer = uebungen[i].GetAufgabennummer() + 1;
-                sql = "update MKB set ID=" + iduebungen + ", Uebungseinheit=" + uebungen[i].GetUebungseinheit() + ", Uebungsnummer=" + uebungsnummer + ",  Uebungsart='" + uebungen[i].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebungen[i].GetLoesung()) + "'  where ID=0";
+                Functions.ConsoleWrite(uebungen[i].GetId().ToString() + "||" + uebungen[i].GetAufgabennummer().
+                    ToString() + "||" + idnumber.ToString(), ConsoleColor.Red);
+                int iduebungen = (uebungen[i].GetId()) + 1;
+                int uebungsnummer = uebungen[i].GetAufgabennummer();
+                sql = "update MKB set NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungseinheit=" + uebungen[i].GetUebungseinheit() + ", Uebungsnummer=" + uebungsnummer + ",  Uebungsart='" + uebungen[i].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebungen[i].GetLoesung()) + "'  where ID=" + iduebungen + "";
                 Functions.sqlStatement(sql);
+                //sql = "update MKB set Uebungsnummer=" + uebungsnummer + " where ID=" + iduebungen + " AND Uebungsart='"+ uebungen[i].GetUebungsart() + "'";
+
+                idnumber++;
             }
+
             CreateNewPath();
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
             getUserInput = Console.ReadLine();
             string[] fileinput = GetFileInput();
             string loesung = "";
-            int aufgabennummer = Int32.Parse(allInput[0]);
-            sql = "update MKB set Uebungseinheit=" + aufgabennummer + ", Uebungsnummer=" + uebungen[1].GetAufgabennummer() + ",  Uebungsart='" + uebungen[1].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(fileinput[0]) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(fileinput[1]) + "', Loesung='" + loesung + "'  where ID=" + id + "";
+            int uebungseinheit = Int32.Parse(allInput[0]);
+            sql = "update MKB set Uebungseinheit=" + uebungseinheit + ", Uebungsnummer=" + uebungen[1].GetAufgabennummer() + ",  Uebungsart='" + uebungen[1].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(fileinput[0]) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(fileinput[1]) + "', Loesung='" + loesung + "'  where ID=" + id + "";
             Functions.sqlStatement(sql);
             m_dbConnection.Close();
         }

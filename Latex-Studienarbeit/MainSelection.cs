@@ -21,7 +21,7 @@ namespace Latex_Studienarbeit
                     m_dbConnection.Open();
                     ChangeEntry.UpdateTexEntry();
                     m_dbConnection.Close();
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
                         Read();
@@ -32,6 +32,7 @@ namespace Latex_Studienarbeit
                     ChangeEntry.ChangeOrderinDatabase();
                     m_dbConnection.Close();
                     Functions.ConsoleWrite("Sie haben erfolgreich zwei Übungen miteinander vertauscht", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
                         Read();
@@ -47,7 +48,7 @@ namespace Latex_Studienarbeit
                     ExportFromDB.ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
                     m_dbConnection.Close();
                     Functions.ConsoleWrite("Es wurden neue Dateien angelegt.", ConsoleColor.DarkGreen);
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
                         Read();
@@ -56,7 +57,7 @@ namespace Latex_Studienarbeit
                 {
                     AddNewTask.AddTask();
                     Functions.ConsoleWrite("Die neue Aufgabe wurde erfolgreich hochgeladen", ConsoleColor.DarkBlue);
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
                         Read();

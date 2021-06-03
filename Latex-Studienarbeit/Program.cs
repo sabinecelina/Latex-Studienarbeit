@@ -8,9 +8,9 @@ namespace Latex_Studienarbeit
     {
         static void Main(string[] args)
         {
-           //CreateAndInsertIntoDatabase();
-           MainSelection.Read();
-           //AddNewTask.AddTask();
+           CreateAndInsertIntoDatabase();
+           //MainSelection.Read();
+            AddNewTask.AddTask();
         }
         public static void CreateAndInsertIntoDatabase()
         {
