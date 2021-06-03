@@ -47,12 +47,9 @@ namespace Latex_Studienarbeit
             Console.WriteLine(text);
             Console.ResetColor();
         }
-        public static void AllUebungenFromNumner(string writeLine)
+        public static void AllUebungenFromNumner(string[] allInput)
         {
             m_dbConnection.Open();
-            Functions.ConsoleWrite(writeLine, ConsoleColor.DarkBlue);
-            string getUserInput = Console.ReadLine();
-            string[] allInput = getUserInput.Split(',');
             Functions.ConsoleWrite("Sie haben folgende Übungen zur Auswahl: \n", ConsoleColor.DarkBlue);
             for(int i = 0; i< allInput.Length; i++) {
                 int uebungseinheit = Int32.Parse(allInput[i]);

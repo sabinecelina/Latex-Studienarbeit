@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Data.SQLite;
-using System;
-using System.IO;
-using System.Text;
-using System.Data.SQLite;
 using System.Collections.Generic;
 
 namespace Latex_Studienarbeit
@@ -14,7 +10,10 @@ namespace Latex_Studienarbeit
         public static void UpdateTexEntry()
         {
             m_dbConnection.Open();
-            Functions.AllUebungenFromNumner("Tippen Sie die Übungseinheit ein, bei der Sie die Aufgabe ändern wollen: ");
+            Functions.ConsoleWrite("Tippen Sie die Übungseinheit ein, bei der Sie die Aufgabe ändern wollen: ", ConsoleColor.DarkBlue);
+            string getInput = Console.ReadLine();
+            string[] allInput = getInput.Split(',');
+            Functions.AllUebungenFromNumner(allInput);
             Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie die ID ein: ", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             int uebungseinheit = Int32.Parse(getUserInput);
@@ -23,26 +22,26 @@ namespace Latex_Studienarbeit
             ExportData.CreatePath(sql, m_dbConnection, entryPath, 2);
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
             getUserInput = Console.ReadLine();
-            if (getUserInput.Equals("weiter"))
+            string line = "";
+            string uebungsaufgabe = "";
+            System.IO.StreamReader file =
+                new System.IO.StreamReader(@"..\..\..\..\" + entryPath);
+            while ((line = file.ReadLine()) != null)
             {
-                string line = "";
-                string uebungsaufgabe = "";
-                System.IO.StreamReader file =
-                    new System.IO.StreamReader(@"..\..\..\..\" + entryPath);
-                while ((line = file.ReadLine()) != null)
-                {
-                    uebungsaufgabe += "\n" + line;
-                }
-                uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
-                sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID='" + getUserInput + "'";
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                command.ExecuteNonQuery();
+                uebungsaufgabe += "\n" + line;
             }
+            uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
+            sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID='" + getUserInput + "'";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
             m_dbConnection.Close();
         }
         public static void ChangeOrderinDatabase()
         {
-            Functions.AllUebungenFromNumner("Tippen Sie die Übungseinheiten ein, in der Sie etwas ändern möchten, z.B. [1,2]?");
+            Functions.ConsoleWrite("Tippen Sie die Übungseinheiten ein, in der Sie etwas ändern möchten, z.B. [1,2]?", ConsoleColor.DarkBlue);
+            string getInput = Console.ReadLine();
+            string[] allInput = getInput.Split(',');
+            Functions.AllUebungenFromNumner(allInput);
             Functions.ConsoleWrite("Welche Aufgaben möchten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInputArray = getUserInput.Split(',');
