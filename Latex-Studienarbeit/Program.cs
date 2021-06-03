@@ -1,5 +1,6 @@
 ﻿using System;
-using System.IO;
+using System.Data.SQLite;
+
 
 namespace Latex_Studienarbeit
 {
@@ -9,6 +10,7 @@ namespace Latex_Studienarbeit
         {
            //CreateAndInsertIntoDatabase();
            MainSelection.Read();
+           //AddNewTask.AddTask();
         }
         public static void CreateAndInsertIntoDatabase()
         {

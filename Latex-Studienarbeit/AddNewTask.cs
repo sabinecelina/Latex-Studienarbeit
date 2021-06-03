@@ -25,8 +25,6 @@ namespace Latex_Studienarbeit
             int RowCount = 0;
             RowCount = Convert.ToInt32(command.ExecuteScalar()) - Int32.Parse(getUserInput);
             int id = Int32.Parse(getUserInput) + 1;
-            Functions.ConsoleWrite(RowCount.ToString(), ConsoleColor.Magenta);
-            Functions.ConsoleWrite(id.ToString(), ConsoleColor.Green);
             List<Uebungen> uebungen = new List<Uebungen>();
             Uebungen newUebung = new Uebungen("name", 2, id);
             uebungen.Add(newUebung);
@@ -41,17 +39,12 @@ namespace Latex_Studienarbeit
                     uebungen.Add(ExportFromDB.ExportAll(reader));
                 }
             }
-            foreach (Uebungen uebbb in uebungen)
-            {
-                Functions.ConsoleWrite(uebbb.GetName(), ConsoleColor.Green);
-            }
             sql = "insert into MKB (ID) values (0)";
             Functions.sqlStatement(sql);
             for (int i = 1; i < uebungen.Count; i++)
             {
                 int iduebungen = uebungen[i].GetId() + 1;
                 int uebungsnummer = uebungen[i].GetAufgabennummer() + 1;
-                Functions.ConsoleWrite(uebungen[i].GetName() + " || " + iduebungen, ConsoleColor.Green);
                 sql = "update MKB set ID=" + iduebungen + ", Uebungseinheit=" + uebungen[i].GetUebungseinheit() + ", Uebungsnummer=" + uebungsnummer + ",  Uebungsart='" + uebungen[i].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebungen[i].GetLoesung()) + "'  where ID=0";
                 Functions.sqlStatement(sql);
             }

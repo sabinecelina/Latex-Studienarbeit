@@ -43,11 +43,20 @@ namespace Latex_Studienarbeit
                     int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
                     AskIfExist(m_dbConnection, uebungseinheit_number);
                     Functions.ConsoleWrite("Moechten Sie die Übungseinheiten mit Lösungen(1) exportieren oder nur die Übungsaufgaben(2) oder nur die Lösungen(3)?", ConsoleColor.DarkBlue);
-
                     int numberUserInput = Convert.ToInt32(Console.ReadLine());
                     ExportFromDB.ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
                     m_dbConnection.Close();
                     Functions.ConsoleWrite("Es wurden neue Dateien angelegt.", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
+                    string getUserInput = Console.ReadLine().ToUpper();
+                    if (getUserInput.Equals("J"))
+                        Read();
+                }
+                if(auswahl == 4)
+                {
+                    AddNewTask.AddTask();
+                    Functions.ConsoleWrite("Die neue Aufgabe wurde erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkGreen);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
                         Read();

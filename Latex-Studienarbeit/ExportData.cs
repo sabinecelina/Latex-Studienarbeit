@@ -107,7 +107,7 @@ namespace Latex_Studienarbeit
                         aufgaben.Add(aufgabe);
                         break;
                     case 3:
-                        loesung = ExportFromDB.ExportLoesungen(reader);
+                        loesung = ExportFromDB.ExportLoesungenForUser(reader);
                         aufgaben.Add(loesung);
                         aufgaben.Add("\n");
                         break;

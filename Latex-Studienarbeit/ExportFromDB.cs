@@ -15,6 +15,12 @@ namespace Latex_Studienarbeit
         }
         public static string ExportLoesungen(SQLiteDataReader reader)
         {
+            string loesung = reader["Loesung"].ToString();
+            loesung = Functions.ReplaceStringToText(loesung);
+            return loesung;
+        }
+        public static string ExportLoesungenForUser(SQLiteDataReader reader)
+        {
             string loesunsgname = reader["NameDerAufgabe"].ToString();
             string loesung = reader["Loesung"].ToString();
             string id = reader["ID"].ToString();
@@ -59,8 +65,15 @@ namespace Latex_Studienarbeit
             id = reader["Uebungseinheit"].ToString();
             return id;
         }
+        public static string ExportUebungsart(SQLiteDataReader reader)
+        {
+            string id = "";
+            id = reader["Uebungsart"].ToString();
+            return id;
+        }
         public static Uebungen ExportAll(SQLiteDataReader reader)
         {
+            string uebungsart = ExportUebungsart(reader);
             string aufgabe = ExportAufgaben(reader);
             string loesung = ExportLoesungen(reader);
             string name = ExportNameDerAufgabe(reader);
@@ -68,8 +81,8 @@ namespace Latex_Studienarbeit
             int nummer = Int32.Parse(uebungsnummer);
             string id = ExportID(reader);
             int idnummer = Int32.Parse(id);
-            string uebungseinheit = ExportUebungseinheit(reader);
-            Uebungen uebung = new Uebungen(uebungseinheit, aufgabe, loesung, name, nummer, idnummer);
+            int uebungseinheit = Int32.Parse(ExportUebungseinheit(reader));
+            Uebungen uebung = new Uebungen(uebungseinheit, uebungsart, aufgabe, loesung, name, nummer, idnummer);
             return uebung;
         }
         public static void ExportFiles(SQLiteConnection m_dbConnection, int number, int auswahl)
@@ -82,19 +95,12 @@ namespace Latex_Studienarbeit
                     {
                         Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
                         string userInput = Console.ReadLine();
-                        string[] input = userInput.Split(",");
-                        if (input.Length == 1)
-                        {
-                            throw new Exception();
-                        }
-                        else
-                        {
-                            ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
-                        }
+                        ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
                     }
                     catch (Exception e)
                     {
-                        Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. Bitte versuchen Sie es erneut./n ", ConsoleColor.DarkYellow);
+                        Console.WriteLine(e);
+                        Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. Bitte versuchen Sie es erneut. \n ", ConsoleColor.DarkYellow);
                         continue;
                     }
                     break;

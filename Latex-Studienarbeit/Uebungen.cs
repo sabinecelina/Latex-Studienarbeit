@@ -14,7 +14,8 @@ namespace Latex_Studienarbeit
         private string aufgabe;
         private string loesung;
         private int id;
-        private string uebungseinheit;
+        private int  uebungseinheit;
+        private string uebungsart;
         public Uebungen()
         {
         }
@@ -30,7 +31,7 @@ namespace Latex_Studienarbeit
             this.aufgabennummer = aufgabennummer;
             this.id = id;
         }
-        public Uebungen(string uebungseinheit, string aufgabe, string loesung, string name, int aufgabennummer, int id)
+        public Uebungen(int uebungseinheit, string aufgabe, string loesung, string name, int aufgabennummer, int id)
         {
             this.aufgabe = aufgabe;
             this.loesung = loesung;
@@ -38,6 +39,24 @@ namespace Latex_Studienarbeit
             this.aufgabennummer = aufgabennummer;
             this.id = id;
             this.uebungseinheit = uebungseinheit;
+        }
+        public Uebungen(int uebungseinheit, string uebungsart, string aufgabe, string loesung, string name, int aufgabennummer, int id)
+        {
+            this.aufgabe = aufgabe;
+            this.loesung = loesung;
+            this.name = name;
+            this.aufgabennummer = aufgabennummer;
+            this.id = id;
+            this.uebungseinheit = uebungseinheit;
+            this.uebungsart = uebungsart;
+        }
+        public int GetUebungseinheit()
+        {
+            return this.uebungseinheit;
+        }
+        public string GetUebungsart()
+        {
+            return this.uebungsart;
         }
         public string GetAufgabe()
         {
