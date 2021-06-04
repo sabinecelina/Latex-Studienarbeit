@@ -31,6 +31,13 @@ namespace Latex_Studienarbeit
             this.aufgabennummer = aufgabennummer;
             this.id = id;
         }
+        public Uebungen(string name, int aufgabennummer, string uebungsart, int id)
+        {
+            this.name = name;
+            this.aufgabennummer = aufgabennummer;
+            this.id = id;
+            this.uebungsart = uebungsart;
+        }
         public Uebungen(int uebungseinheit, string aufgabe, string loesung, string name, int aufgabennummer, int id)
         {
             this.aufgabe = aufgabe;

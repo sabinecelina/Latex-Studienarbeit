@@ -85,31 +85,48 @@ namespace Latex_Studienarbeit
             Uebungen uebung = new Uebungen(uebungseinheit, uebungsart, aufgabe, loesung, name, nummer, idnummer);
             return uebung;
         }
-        public static void ExportFiles(SQLiteConnection m_dbConnection, int number, int auswahl)
+        public static void ExportFiles(SQLiteConnection m_dbConnection)
         {
-            if (number == 1 || number == 2)
+            Functions.ConsoleWrite("Welche Übungseinheit in Nummer möchten Sie exportieren?", ConsoleColor.DarkBlue);
+            int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
+            AskIfExist(m_dbConnection, uebungseinheit_number);
+            Functions.ConsoleWrite("Moechten Sie die Übungseinheiten mit Lösungen(1) exportieren oder nur die Übungsaufgaben(2) oder nur die Lösungen(3)?", ConsoleColor.DarkBlue);
+            int numberUserInput = Convert.ToInt32(Console.ReadLine());
+            if (numberUserInput == 1 || numberUserInput == 2)
             {
-                while (true)
-                {
                     try
                     {
                         Functions.ConsoleWrite("Welche Uebungsaufgaben moechten Sie exportieren? Geben Sie jeweils P oder H oder T an. Trennen Sie Ihre Angaben bitte mit einem ','", ConsoleColor.DarkBlue);
                         string userInput = Console.ReadLine();
-                        ExportData.ExportUebungen(userInput, m_dbConnection, auswahl, number);
+                        ExportData.ExportUebungen(userInput, m_dbConnection, uebungseinheit_number, numberUserInput);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
                         Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. Bitte versuchen Sie es erneut. \n ", ConsoleColor.DarkYellow);
-                        continue;
                     }
-                    break;
+            }
+            else if (numberUserInput == 3)
+            {
+                ExportFromDB.ExportLoesungenTex(m_dbConnection, uebungseinheit_number);
+            }
+        }
+        public static void AskIfExist(SQLiteConnection m_dbConnection, int number)
+        {
+            string[] uebungsart = new string[] { "P", "H", "T" };
+
+            for (int i = 0; i < uebungsart.Length; i++)
+            {
+                string sql = "select exists(select Uebungsaufgabe from MKB where Uebungsart='" + uebungsart[i] + "' AND Uebungseinheit=" + number + ")";
+                SQLiteCommand command = new(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+                int count = Convert.ToInt32(command.ExecuteScalar());
+                if (count == 0)
+                {
+                    Functions.ConsoleWrite("Warnung! Bitte beachten Sie: Es existieren keine " + uebungsart[i] + " Uebungen in der Uebungseinheit " + number + " \n", ConsoleColor.DarkYellow);
                 }
             }
-            else if (number == 3)
-            {
-                ExportFromDB.ExportLoesungenTex(m_dbConnection, auswahl);
-            }
+
         }
     }
 }

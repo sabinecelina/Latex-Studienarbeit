@@ -40,14 +40,9 @@ namespace Latex_Studienarbeit
                 if (auswahl == 3)
                 {
                     m_dbConnection.Open();
-                    Functions.ConsoleWrite("Welche Übungseinheit in Nummer möchten Sie exportieren?", ConsoleColor.DarkBlue);
-                    int uebungseinheit_number = Convert.ToInt32(Console.ReadLine());
-                    AskIfExist(m_dbConnection, uebungseinheit_number);
-                    Functions.ConsoleWrite("Moechten Sie die Übungseinheiten mit Lösungen(1) exportieren oder nur die Übungsaufgaben(2) oder nur die Lösungen(3)?", ConsoleColor.DarkBlue);
-                    int numberUserInput = Convert.ToInt32(Console.ReadLine());
-                    ExportFromDB.ExportFiles(m_dbConnection, numberUserInput, uebungseinheit_number);
+                    ExportFromDB.ExportFiles(m_dbConnection);
                     m_dbConnection.Close();
-                    Functions.ConsoleWrite("Es wurden neue Dateien angelegt.", ConsoleColor.DarkGreen);
+                    Functions.ConsoleWrite("Es wurden neue Dateien im Verzeichnis angelegt.", ConsoleColor.DarkGreen);
                     Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
                     string getUserInput = Console.ReadLine().ToUpper();
                     if (getUserInput.Equals("J"))
@@ -72,31 +67,17 @@ namespace Latex_Studienarbeit
                     Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
                 }
                 if (auswahl > 5)
-                    throw new Exception();
+                    throw new ExceptionHandler("Sie haben eine Zahl eingegeben, der keinen Befehl zugewiesen wurde.", ConsoleColor.DarkRed);
             }
-            catch (Exception e)
+            catch (System.FormatException e)
             {
-                Console.Write(e);
-                Functions.ConsoleWrite("Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkYellow);
+                Functions.ConsoleWrite("\n Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkRed);
                 Read();
             }
-        }
-
-
-        public static void AskIfExist(SQLiteConnection m_dbConnection, int number)
-        {
-            for (int i = 0; i < uebungsart.Length; i++)
+            catch (ExceptionHandler e)
             {
-                string sql = "select exists(select Uebungsaufgabe from MKB where Uebungsart='" + uebungsart[i] + "' AND Uebungseinheit=" + number + ")";
-                SQLiteCommand command = new(sql, m_dbConnection);
-                command.ExecuteNonQuery();
-                int count = Convert.ToInt32(command.ExecuteScalar());
-                if (count == 0)
-                {
-                    Functions.ConsoleWrite("Warnung! Bitte beachten Sie: Es existieren keine " + uebungsart[i] + " Uebungen in der Uebungseinheit " + number + " \n", ConsoleColor.DarkYellow);
-                }
+                Read();
             }
-
         }
 
     }

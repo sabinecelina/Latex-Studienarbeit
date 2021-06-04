@@ -30,9 +30,15 @@ namespace Latex_Studienarbeit
         public static void CreateDatabaseSQLite()
         {
             nameOfFiles = Functions.GetAllFiles(new DirectoryInfo(@"..\..\..\..\MKB-1\"));
-            SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
-            string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
-            Functions.sqlStatement(sql);
+            try
+            {
+                SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
+                string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
+                Functions.sqlStatement(sql);
+            } catch(Exception e)
+            {
+                Console.WriteLine("\n Ihre Datenbank ist in einem anderen Programm geöffnet, bitte schließen Sie das Programm, wenn Sie die Datenbank neu erstellen wollen. \n");
+            }
         }
 
         /** insert information into Database*/
@@ -91,7 +97,7 @@ namespace Latex_Studienarbeit
                             tnumber++;
                             break;
                     }
-                    string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart,WirdVerwendet,  Uebungsaufgabe, Loesung) values ('" + id + "','" + getNumber + "', '" + number + "', '" + uebungsart + "', '0', '" + aufgabe[i] + "', '" + loesung[i] + "')";
+                    string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart, WirdVerwendet,  Uebungsaufgabe, Loesung) values ('" + id + "','" + getNumber + "', '" + number + "', '" + uebungsart + "', '0', '" + aufgabe[i] + "', '" + loesung[i] + "')";
                     Functions.sqlStatement(sql);
                     id++;
                 }
