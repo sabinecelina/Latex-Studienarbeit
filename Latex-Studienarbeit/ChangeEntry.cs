@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.Collections.Generic;
-
 namespace Latex_Studienarbeit
 {
     class ChangeEntry
@@ -29,21 +28,27 @@ namespace Latex_Studienarbeit
             string getUserInput = Console.ReadLine();
             int uebungseinheit = Int32.Parse(getUserInput);
             m_dbConnection.Open();
+            String path = Functions.GetCurrentDate();
             string sql = "select Uebungsaufgabe from MKB where ID=" + uebungseinheit + "";
-            string entryPath = "uebungsaufgabe.tex";
+            string entryPath = path + "-uebungsaufgabe.tex";
             ExportData.CreatePath(sql, m_dbConnection, entryPath, 2);
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
-            getUserInput = Console.ReadLine();
-            string line = "";
+            string next = Console.ReadLine();
+            string line = "";   
             string uebungsaufgabe = "";
+            //Console.WriteLine(now);
+            Console.WriteLine(@"..\..\..\..\" + entryPath);
             System.IO.StreamReader file =
-                new System.IO.StreamReader(@"..\..\..\..\" + entryPath);
+                new System.IO.StreamReader(@"..\..\..\..\"  + entryPath);
             while ((line = file.ReadLine()) != null)
             {
-                uebungsaufgabe += "\n" + line;
+                Console.WriteLine("while");
+                uebungsaufgabe += line + "\n";
             }
+            Console.WriteLine(uebungsaufgabe);
             uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
-            sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID='" + getUserInput + "'";
+            sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID=" + getUserInput + "";
+            Console.WriteLine(sql);
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
             m_dbConnection.Close();

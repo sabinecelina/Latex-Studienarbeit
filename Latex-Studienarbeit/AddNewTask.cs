@@ -77,8 +77,11 @@ namespace Latex_Studienarbeit
 
             try
             {
+                DateTime now = DateTime.Now;
+                //Console.WriteLine(now);
+                String path = now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-";
                 // Create the file, or overwrite if the file exists.
-                using (FileStream fs = File.Create(@"..\..\..\..\" + "neueAufgabe.tex"))
+                using (FileStream fs = File.Create(@"..\..\..\..\" + path + "neueAufgabe.tex"))
                 {
                     for (int i = 0; i < allInput.Length; i++)
                     {
@@ -106,7 +109,7 @@ namespace Latex_Studienarbeit
                 uebungseinheit += line + "\n";
             }
             //AufgabenMitLoesung beinhaltet eine U-Aufgabe mit der zugehoerigen Loesung
-            string[] aufgabenMitLoesungen = uebungseinheit.Split(new string[] { "SPLITAufgabe" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] aufgabenMitLoesungen = uebungseinheit.Split(new string[] { "%SPLITAufgabe" }, StringSplitOptions.RemoveEmptyEntries);
             return aufgabenMitLoesungen;
         }
     }

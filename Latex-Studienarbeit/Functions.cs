@@ -47,6 +47,11 @@ namespace Latex_Studienarbeit
             Console.WriteLine(text);
             Console.ResetColor();
         }
+        public static string GetCurrentDate()
+        {
+            DateTime now = DateTime.Now;
+            return now.ToString("yyyy-MM-dd_H-mm-ss");
+        }
         public static void AllUebungenFromNumner(string[] allInput)
         {
             Functions.ConsoleWrite("Sie haben folgende Übungen zur Auswahl: \n", ConsoleColor.DarkBlue);

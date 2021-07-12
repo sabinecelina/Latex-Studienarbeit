@@ -8,16 +8,24 @@ namespace Latex_Studienarbeit
     {
         static void Main(string[] args)
         {
-                //CreateAndInsertIntoDatabase();
-                MainSelection.Read();
+            //CreateAndInsertIntoDatabase();
+            MainSelection.Read();
         }
         public static void CreateAndInsertIntoDatabase()
         {
-            CreateDatabase.CreateDatabaseSQLite();
-            CreateDatabase.InsertIntoDatabase();
-            ReadJson.readJson();
-            ReadJson.ChangeDatabaseEntry();
-            Functions.ConsoleWrite("Die Datenbank wurde erfolgreich erstellt.", ConsoleColor.DarkGreen);
+            // Creates the Database and Insert Data in Database with reading the name of the task from json
+            try
+            {
+                CreateDatabase.CreateDatabaseSQLite();
+                CreateDatabase.InsertIntoDatabase();
+                ReadJson.readJson();
+                ReadJson.ChangeDatabaseEntry();
+            }
+            catch (Exception e)
+            {
+                Functions.ConsoleWrite("Etwas ist schiefgelaufen. Bitte starten Sie das Programm erneut.", ConsoleColor.DarkRed);
+                Console.WriteLine(e);
+            }
         }
     }
 }

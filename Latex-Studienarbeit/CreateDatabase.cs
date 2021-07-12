@@ -35,9 +35,11 @@ namespace Latex_Studienarbeit
                 SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
                 string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
                 Functions.sqlStatement(sql);
-            } catch(Exception e)
+                Functions.ConsoleWrite("Die Datenbank wurde erfolgreich erstellt.", ConsoleColor.DarkGreen);
+            }
+            catch (Exception e)
             {
-                Console.WriteLine("\n Ihre Datenbank ist in einem anderen Programm geöffnet, bitte schließen Sie das Programm, wenn Sie die Datenbank neu erstellen wollen. \n");
+                Functions.ConsoleWrite("\n Ihre Datenbank ist in einem anderen Programm geöffnet, bitte schließen Sie das Programm, wenn Sie die Datenbank neu erstellen wollen. \n", ConsoleColor.DarkRed);
             }
         }
 
