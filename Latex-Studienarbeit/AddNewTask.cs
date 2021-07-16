@@ -19,6 +19,9 @@ namespace Latex_Studienarbeit
             Functions.AllUebungenFromNumner(allInput);
             Functions.ConsoleWrite("Nach welcher ID möchten Sie die neue Aufgabe hinzufügen?", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
+            Functions.ConsoleWrite("Welche Uebungsart soll diese Aufgabe haben [P,H,T]?", ConsoleColor.DarkBlue);
+            string uebungsartInput = Console.ReadLine();
+            uebungsartInput = uebungsartInput.ToUpper();
             string sql = "SELECT COUNT(*) FROM MKB";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
@@ -46,29 +49,41 @@ namespace Latex_Studienarbeit
             int idnumber = id;
             for (int i = 1; i < uebungen.Count; i++)
             {
-                Functions.ConsoleWrite(uebungen[i].GetId().ToString() + "||" + uebungen[i].GetAufgabennummer().
-                    ToString() + "||" + idnumber.ToString(), ConsoleColor.Red);
                 int iduebungen = (uebungen[i].GetId()) + 1;
                 int uebungsnummer = uebungen[i].GetAufgabennummer();
-                sql = "update MKB set NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungseinheit=" + uebungen[i].GetUebungseinheit() + ", Uebungsnummer=" + uebungsnummer + ",  Uebungsart='" + uebungen[i].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetName()) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()) + "', Loesung='" + Functions.ReplaceStringToDB(uebungen[i].GetLoesung()) + "'  where ID=" + iduebungen + "";
-                Functions.sqlStatement(sql);
+                sql = "update MKB set NamederAufgabe=@name, Uebungseinheit=@ueinheit, Uebungsnummer=@un, Uebungsart=@ua, Uebungsaufgabe=@aufgabe, Loesung=@loesung where ID=" + iduebungen + "";
+                command = new SQLiteCommand(sql, m_dbConnection);
+                command.Parameters.AddWithValue("@name", Functions.ReplaceStringToDB(uebungen[i].GetName()));
+                command.Parameters.AddWithValue("@ueinheit", uebungen[i].GetUebungseinheit());
+                command.Parameters.AddWithValue("@un", uebungsnummer);
+                command.Parameters.AddWithValue("@ua", uebungen[i].GetUebungsart());
+                command.Parameters.AddWithValue("@aufgabe", Functions.ReplaceStringToDB(uebungen[i].GetAufgabe()));
+                command.Parameters.AddWithValue("@loesung", Functions.ReplaceStringToDB(uebungen[i].GetLoesung()));
+                command.ExecuteNonQuery();
                 uebungsnummer += 1;
-                sql = "update MKB set Uebungsnummer=" + uebungsnummer + " where ID=" + iduebungen + " AND Uebungsart='"+ uebungen[1].GetUebungsart() + "'";
-                Functions.sqlStatement(sql);
                 idnumber++;
             }
-
-            CreateNewPath();
+            string path = Functions.GetCurrentDate();
+            path = path + "-neueAufgabe.tex";
+            CreateNewPath(path);
             Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
             getUserInput = Console.ReadLine();
-            string[] fileinput = GetFileInput();
+            string[] fileinput = GetFileInput(path);
             string loesung = "";
             int uebungseinheit = Int32.Parse(allInput[0]);
-            sql = "update MKB set Uebungseinheit=" + uebungseinheit + ", Uebungsnummer=" + uebungen[1].GetAufgabennummer() + ",  Uebungsart='" + uebungen[1].GetUebungsart() + "', WirdVerwendet=0, NamederAufgabe='" + Functions.ReplaceStringToDB(fileinput[0]) + "', Uebungsaufgabe='" + Functions.ReplaceStringToDB(fileinput[1]) + "', Loesung='" + loesung + "'  where ID=" + id + "";
-            Functions.sqlStatement(sql);
+            sql = "update MKB set Uebungseinheit=@ueinheit, Uebungsnummer = @un,  Uebungsart=@ua, NamederAufgabe=@name, Uebungsaufgabe=@aufgabe, Loesung=@loesung  where ID=" + id + "";
+            command = new SQLiteCommand(sql, m_dbConnection);
+            command.Parameters.AddWithValue("@name", Functions.ReplaceStringToDB(fileinput[0]));
+            command.Parameters.AddWithValue("@ueinheit", uebungseinheit);
+            command.Parameters.AddWithValue("@un", uebungen[1].GetAufgabennummer());
+            command.Parameters.AddWithValue("@ua", uebungsartInput);
+            command.Parameters.AddWithValue("@aufgabe", Functions.ReplaceStringToDB(Functions.ReplaceStringToDB(fileinput[1])));
+            command.Parameters.AddWithValue("@loesung", Functions.ReplaceStringToDB(loesung));
+            command.ExecuteNonQuery();
+            ChangeNumberOfNewTask(uebungsartInput);
             m_dbConnection.Close();
         }
-        public static void CreateNewPath()
+        public static void CreateNewPath(string exportPath)
         {
             string nameDerAufgabe = "HIER SOLLTE DER NAME DER AUFGABE STEHEN \n";
             string trennung = "%SPLITAufgabe \n";
@@ -77,11 +92,9 @@ namespace Latex_Studienarbeit
 
             try
             {
-                DateTime now = DateTime.Now;
-                //Console.WriteLine(now);
-                String path = now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-";
+                String path = Functions.GetCurrentDate();
                 // Create the file, or overwrite if the file exists.
-                using (FileStream fs = File.Create(@"..\..\..\..\" + path + "neueAufgabe.tex"))
+                using (FileStream fs = File.Create(@"..\..\..\..\" + exportPath))
                 {
                     for (int i = 0; i < allInput.Length; i++)
                     {
@@ -97,11 +110,11 @@ namespace Latex_Studienarbeit
             }
             Functions.ConsoleWrite("Im Verzeichnis befindet sich eine neue .tex Datei mit dem Namen 'neue Aufgabe'. Bitte schreiben Sie den Code in die Felder", ConsoleColor.DarkGreen);
         }
-        public static string[] GetFileInput()
+        public static string[] GetFileInput(string exportPath)
         {
             string uebungseinheit = "";
             string line = "";
-            string filename = @"..\..\..\..\" + "neueAufgabe.tex";
+            string filename = @"..\..\..\..\" + exportPath;
             System.IO.StreamReader file =
                 new System.IO.StreamReader(filename);
             while ((line = file.ReadLine()) != null)
@@ -111,6 +124,29 @@ namespace Latex_Studienarbeit
             //AufgabenMitLoesung beinhaltet eine U-Aufgabe mit der zugehoerigen Loesung
             string[] aufgabenMitLoesungen = uebungseinheit.Split(new string[] { "%SPLITAufgabe" }, StringSplitOptions.RemoveEmptyEntries);
             return aufgabenMitLoesungen;
+        }
+        public static void ChangeNumberOfNewTask(string uebungsart)
+        {
+            string sql = "SELECT COUNT(*) FROM MKB where Uebungsart='" + uebungsart + "'";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
+            int RowCount = Convert.ToInt32(command.ExecuteScalar());
+            List<int> uebungen = new List<int>();
+            int id = 0;
+            sql = "select * from MKB where Uebungsart='" + uebungsart + "'";
+            command = new SQLiteCommand(sql, m_dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            int i = 0;
+            while (reader.Read())
+            {
+                id = Int32.Parse(ExportFromDB.ExportID(reader));
+                sql = "update MKB set Uebungsnummer = @un where ID=" + id + "";
+                command = new SQLiteCommand(sql, m_dbConnection);
+                command.Parameters.AddWithValue("@un", i + 1);
+                command.ExecuteNonQuery();
+                i++;
+
+            }
         }
     }
 }

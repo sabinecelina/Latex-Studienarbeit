@@ -12,23 +12,6 @@ namespace Latex_Studienarbeit
         private static string connectionPath = @"Data Source=..\..\..\..\MKB.sqlite;Version=3;";
         private static SQLiteConnection m_dbConnection = new SQLiteConnection(connectionPath);
         private static List<string> nameOfFiles = new List<string>();
-        //public static void sortList()
-        //{
-        //    string[] array = new string[] { "p", "h", "t" };
-        //    List<string> uebungen = new List<string>();
-        //    for (int i = 0; i < 2; i++)
-        //    {
-        //        string ii = i.ToString();
-        //        for (int j = 0; j < fileName.Count; j++)
-        //        {
-        //            if (fileName[j].Contains(ii))
-        //            {
-        //                Console.WriteLine(fileName[j]);
-        //            }
-        //        }
-        //    }
-        //}
-        /** create Table MKB */
         public static void CreateDatabaseSQLite()
         {
             nameOfFiles = Functions.GetAllFiles(new DirectoryInfo(@"..\..\..\..\MKB-1\"));
@@ -109,7 +92,6 @@ namespace Latex_Studienarbeit
                     SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@ueinheit", getNumber.ToString());
-                    Console.Write(getNumber);
                     command.Parameters.AddWithValue("@un", number);
                     command.Parameters.AddWithValue("@ua", uebungsart);
                     command.Parameters.AddWithValue("@aufgabe", aufgabe[i]);
