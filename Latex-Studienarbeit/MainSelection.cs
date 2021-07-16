@@ -72,6 +72,7 @@ namespace Latex_Studienarbeit
             catch (System.FormatException e)
             {
                 Functions.ConsoleWrite("\n Diese Eingabe war leider ungueltig. \n", ConsoleColor.DarkRed);
+                Console.WriteLine(e);
                 Read();
             }
             catch (ExceptionHandler e)

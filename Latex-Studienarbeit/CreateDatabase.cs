@@ -9,6 +9,8 @@ namespace Latex_Studienarbeit
 {
     class CreateDatabase
     {
+        private static string connectionPath = @"Data Source=..\..\..\..\MKB.sqlite;Version=3;";
+        private static SQLiteConnection m_dbConnection = new SQLiteConnection(connectionPath);
         private static List<string> nameOfFiles = new List<string>();
         //public static void sortList()
         //{
@@ -33,7 +35,7 @@ namespace Latex_Studienarbeit
             try
             {
                 SQLiteConnection.CreateFile(@"..\..\..\..\MKB.sqlite");
-                string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, WirdVerwendet integer, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
+                string sql = "create table MKB (ID integer, Uebungseinheit integer,Uebungsnummer integer, Uebungsart varchar, NameDerAufgabe varchar, Uebungsaufgabe varchar, Loesung varchar)";
                 Functions.sqlStatement(sql);
                 Functions.ConsoleWrite("Die Datenbank wurde erfolgreich erstellt.", ConsoleColor.DarkGreen);
             }
@@ -46,6 +48,8 @@ namespace Latex_Studienarbeit
         /** insert information into Database*/
         public static void InsertIntoDatabase()
         {
+            m_dbConnection.Open();
+
             int id = 1;
             int pnumber = 1;
             int hnumber = 1;
@@ -99,11 +103,22 @@ namespace Latex_Studienarbeit
                             tnumber++;
                             break;
                     }
-                    string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart, WirdVerwendet,  Uebungsaufgabe, Loesung) values ('" + id + "','" + getNumber + "', '" + number + "', '" + uebungsart + "', '0', '" + aufgabe[i] + "', '" + loesung[i] + "')";
-                    Functions.sqlStatement(sql);
+                    string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart,  Uebungsaufgabe, Loesung) values (@id, @ueinheit, @un, @ua, @aufgabe, @loesung)";
+                    //Functions.sqlStatement(sql);
+                    //string sql = "insert into MKB (ID, Uebungseinheit, Uebungsnummer,  Uebungsart,  Uebungsaufgabe, Loesung) values (@id, @ue, @un, @ua, @aufgabe, @loesung)";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    command.Parameters.AddWithValue("@id", id);
+                    command.Parameters.AddWithValue("@ueinheit", getNumber.ToString());
+                    Console.Write(getNumber);
+                    command.Parameters.AddWithValue("@un", number);
+                    command.Parameters.AddWithValue("@ua", uebungsart);
+                    command.Parameters.AddWithValue("@aufgabe", aufgabe[i]);
+                    command.Parameters.AddWithValue("@loesung", loesung[i]);
+                    command.ExecuteNonQuery();
                     id++;
                 }
             }
+            m_dbConnection.Close();
         }
 
     }

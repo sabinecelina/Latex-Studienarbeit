@@ -47,9 +47,9 @@ namespace Latex_Studienarbeit
             }
             Console.WriteLine(uebungsaufgabe);
             uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
-            sql = "update MKB set Uebungsaufgabe='" + uebungsaufgabe + "' where ID=" + getUserInput + "";
-            Console.WriteLine(sql);
+            sql = "update MKB set Uebungsaufgabe=@aufgabe where ID=" + getUserInput + "";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.Parameters.AddWithValue("@aufgabe", uebungsaufgabe);
             command.ExecuteNonQuery();
             m_dbConnection.Close();
         }

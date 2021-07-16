@@ -8,18 +8,16 @@ namespace Latex_Studienarbeit
 {
     class ExportData
     {
-        private static string[] uebungen = new string[] { "praesuebg-", "hausuebg-", "tutorium-" };
-        public static void SetUebungseinheitNumber(int number)
+        private static string[] texname; 
+        public static void ExportUebungen(string userInput, SQLiteConnection m_dbConnection, string[] tex, int number,  int auswahl)
         {
-            uebungen[0] = uebungen[0] + number + ".tex";
-            uebungen[1] = uebungen[1] + number + ".tex";
-            uebungen[2] = uebungen[2] + number + ".tex";
-        }
-        public static void ExportUebungen(string userInput, SQLiteConnection m_dbConnection, int number, int auswahl)
-        {
-            SetUebungseinheitNumber(number);
+            texname = tex;
             string sql;
             string[] input = userInput.Split(",");
+            for(int m = 0; m<input.Length; m++)
+            {
+                input[m] = input[m].ToUpper();
+            }
             int caseNumber = 0;
             string uebungsart = "";
             string moeglichkeit = "";
@@ -73,13 +71,13 @@ namespace Latex_Studienarbeit
             switch (uebungsart)
             {
                 case "P":
-                    uebungsart = uebungen[0];
+                    uebungsart = texname[0];
                     break;
                 case "H":
-                    uebungsart = uebungen[1];
+                    uebungsart = texname[1];
                     break;
                 case "T":
-                    uebungsart = uebungen[2];
+                    uebungsart = texname[2];
                     break;
             }
             return uebungsart;
