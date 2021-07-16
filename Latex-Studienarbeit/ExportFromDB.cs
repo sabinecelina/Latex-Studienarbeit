@@ -87,11 +87,11 @@ namespace Latex_Studienarbeit
         }
         public static void ExportFiles(SQLiteConnection m_dbConnection)
         {
-            Functions.ConsoleWrite("Welche Übungseinheiten möchten Sie exportieren, [1,2,3]?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Übungseinheiten möchten Sie als .tex Datei anlegen [1,2,3]?", ConsoleColor.DarkBlue);
             string getInput = Console.ReadLine();
             string[] input = getInput.Split(',');
             int uebungseinheit_number = 0;
-            Functions.ConsoleWrite("Möchten Sie die Übungseinheiten mit Lösungen(1) exportieren oder nur die Übungsaufgaben(2) oder nur die Lösungen(3)?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Möchten Sie die Übungseinheiten mit Lösungen [1] exportieren, nur die Übungsaufgaben [2] oder die Lösungen [3]?", ConsoleColor.DarkBlue);
             int numberUserInput = Convert.ToInt32(Console.ReadLine());
             for (int m = 0; m < input.Length; m++)
             {

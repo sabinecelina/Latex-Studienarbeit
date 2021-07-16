@@ -24,7 +24,7 @@ namespace Latex_Studienarbeit
                 UpdateTexEntry();
             }
             Functions.AllUebungenFromNumner(allInput);
-            Functions.ConsoleWrite("Welche Aufgabe moechten Sie ändern? Tippen Sie die ID ein: ", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgabe möchten Sie ändern? Tippen Sie die ID ein: ", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             int uebungseinheit = Int32.Parse(getUserInput);
             m_dbConnection.Open();
@@ -32,7 +32,9 @@ namespace Latex_Studienarbeit
             string sql = "select Uebungsaufgabe from MKB where ID=" + uebungseinheit + "";
             string entryPath = path + "-uebungsaufgabe.tex";
             ExportData.CreatePath(sql, m_dbConnection, entryPath, 2);
-            Console.WriteLine("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.");
+            Functions.ConsoleWrite("Im Verzeichnis befindet sich eine neue '.tex' Datei mit dem Datum und dem Text Uebungsaufgabe.", ConsoleColor.DarkGreen);
+
+            Functions.ConsoleWrite("Tippen Sie 'weiter' sobald Sie die Übungsaufgabe geändert haben.", ConsoleColor.DarkYellow);
             string next = Console.ReadLine();
             string line = "";   
             string uebungsaufgabe = "";
@@ -45,7 +47,6 @@ namespace Latex_Studienarbeit
                 Console.WriteLine("while");
                 uebungsaufgabe += line + "\n";
             }
-            Console.WriteLine(uebungsaufgabe);
             uebungsaufgabe = Functions.ReplaceStringToDB(uebungsaufgabe);
             sql = "update MKB set Uebungsaufgabe=@aufgabe where ID=" + getUserInput + "";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
@@ -73,7 +74,7 @@ namespace Latex_Studienarbeit
 
             }
             Functions.AllUebungenFromNumner(allInput);
-            Functions.ConsoleWrite("Welche Aufgaben möchten sie tauschen? Bitte geben Sie die IDs an [1,2]", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Welche Aufgaben möchten sie tauschen? Bitte geben Sie die IDs an [1,2]?", ConsoleColor.DarkBlue);
             string getUserInput = Console.ReadLine();
             string[] userInputArray = getUserInput.Split(',');
             UpdateDB(userInputArray);

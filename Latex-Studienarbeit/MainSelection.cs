@@ -12,7 +12,7 @@ namespace Latex_Studienarbeit
         private static SQLiteConnection m_dbConnection = new(@"Data Source=..\..\..\..\MKB.sqlite;Version=3;");
         public static void Read()
         {
-            Functions.ConsoleWrite("Möchten Sie eine Aufgabe bearbeiten (1), Aufgabenreihenfolgen ändern oder verschieben (2), Aufgaben exportieren (3), eine neue Aufgabe hinzufügen (4) oder alle Lösungen importieren (5)?", ConsoleColor.DarkBlue);
+            Functions.ConsoleWrite("Möchten Sie: \n eine Aufgabe bearbeiten [1] \n Aufgabenreihenfolgen ändern  [2] \n Aufgaben als '.tex' Datei ausgeben [3] \n eine neue Aufgabe hinzufügen [4] \n alle Lösungen in die Datenbank eintragen [5]?", ConsoleColor.DarkBlue);
             try
             {
                 int auswahl = Convert.ToInt32(Console.ReadLine());
