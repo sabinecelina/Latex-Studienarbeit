@@ -21,10 +21,7 @@ namespace Latex_Studienarbeit
                     m_dbConnection.Open();
                     ChangeEntry.UpdateTexEntry();
                     m_dbConnection.Close();
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
-                    string getUserInput = Console.ReadLine().ToUpper();
-                    if (getUserInput.Equals("J"))
-                        Read();
+                    start();
                 }
                 if (auswahl == 2)
                 {
@@ -32,10 +29,7 @@ namespace Latex_Studienarbeit
                     ChangeEntry.ChangeOrderinDatabase();
                     m_dbConnection.Close();
                     Functions.ConsoleWrite("Sie haben erfolgreich zwei Übungen miteinander vertauscht", ConsoleColor.DarkGreen);
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
-                    string getUserInput = Console.ReadLine().ToUpper();
-                    if (getUserInput.Equals("J"))
-                        Read();
+                    start();
                 }
                 if (auswahl == 3)
                 {
@@ -43,19 +37,13 @@ namespace Latex_Studienarbeit
                     ExportFromDB.ExportFiles(m_dbConnection);
                     m_dbConnection.Close();
                     Functions.ConsoleWrite("Es wurden neue Dateien im Verzeichnis angelegt.", ConsoleColor.DarkGreen);
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
-                    string getUserInput = Console.ReadLine().ToUpper();
-                    if (getUserInput.Equals("J"))
-                        Read();
+                    start();
                 }
                 if(auswahl == 4)
                 {
                     AddNewTask.AddTask();
                     Functions.ConsoleWrite("Die neue Aufgabe wurde erfolgreich hochgeladen", ConsoleColor.DarkBlue);
-                    Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
-                    string getUserInput = Console.ReadLine().ToUpper();
-                    if (getUserInput.Equals("J"))
-                        Read();
+                    start();
                 }
                 if (auswahl == 5)
                 {
@@ -65,6 +53,7 @@ namespace Latex_Studienarbeit
                     if (weiter.Equals("WEITER"))
                         GetLoesungen.SendLoesungenToDB();
                     Functions.ConsoleWrite("Die Loesungen wurden erfolgreich hochgeladen", ConsoleColor.DarkBlue);
+                    start();
                 }
                 if (auswahl > 5)
                     throw new ExceptionHandler("Sie haben eine Zahl eingegeben, der keinen Befehl zugewiesen wurde.", ConsoleColor.DarkRed);
@@ -79,6 +68,13 @@ namespace Latex_Studienarbeit
             {
                 Read();
             }
+        }
+        public static void start()
+        {
+            Functions.ConsoleWrite("Sie haben erfolgreich den Eintrag geändert. Möchten Sie noch eine Funktion ausführen? [J,N]", ConsoleColor.DarkBlue);
+            string getUserInput = Console.ReadLine().ToUpper();
+            if (getUserInput.Equals("J"))
+                Read();
         }
 
     }
